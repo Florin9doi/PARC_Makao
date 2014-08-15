@@ -1,0 +1,15 @@
+﻿0GL - listeaza jocurile
+0GH - adaugă joc nou
+0GJ - alatură la joc si porneste
+0GS - actualizeaza status
+0GE - inchide joc
+0GR - reporneste joc
+0GM - miscare joc
+00C - mesaj chat
+
+
+array[52]  (0 .. 51)
+nr = 52
+card = floor( random(nr) )
+nr--
+array(card) <-> array(nr)
