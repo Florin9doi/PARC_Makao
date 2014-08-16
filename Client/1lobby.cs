@@ -102,11 +102,11 @@ namespace Client {
             else if ( text.StartsWith ( "0GJ_" ) ) {
                 string[] tmp = text.Substring ( 4 ).Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
                 if ( tmp[0].Equals ( name ) ) { // host
-                    step2 = new game ( con, this, tmp[0], tmp[1], tmp[2], tmp[3], 1 );
+                    step2 = new game ( con, this, tmp[0], tmp[1], 1 );
                     step2.Show ();
                     this.Hide ();
-                } else if ( tmp[2].Equals ( name ) ) { // guest
-                    step2 = new game ( con, this, tmp[0], tmp[1], tmp[2], tmp[3], 2 );
+                } else if ( tmp[1].Equals ( name ) ) { // guest
+                    step2 = new game ( con, this, tmp[0], tmp[1], 2 );
                     step2.Show ();
                     this.Hide ();
                 }

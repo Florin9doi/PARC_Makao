@@ -43,10 +43,11 @@
             this.player2card2 = new System.Windows.Forms.PictureBox();
             this.player2card1 = new System.Windows.Forms.PictureBox();
             this.backCard = new System.Windows.Forms.PictureBox();
-            this.btnStand = new System.Windows.Forms.Button();
-            this.btnHit = new System.Windows.Forms.Button();
+            this.btnDone = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnReset = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnTakeCard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card3)).BeginInit();
@@ -58,22 +59,26 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // chatOut
             // 
+            this.chatOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chatOut.BackColor = System.Drawing.Color.White;
-            this.chatOut.Location = new System.Drawing.Point(397, 12);
+            this.chatOut.Location = new System.Drawing.Point(589, 12);
             this.chatOut.Multiline = true;
             this.chatOut.Name = "chatOut";
             this.chatOut.ReadOnly = true;
             this.chatOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.chatOut.Size = new System.Drawing.Size(139, 274);
+            this.chatOut.Size = new System.Drawing.Size(139, 414);
             this.chatOut.TabIndex = 21;
             // 
             // chatAdd
             // 
-            this.chatAdd.Location = new System.Drawing.Point(397, 292);
+            this.chatAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chatAdd.Location = new System.Drawing.Point(589, 432);
             this.chatAdd.Name = "chatAdd";
             this.chatAdd.Size = new System.Drawing.Size(139, 20);
             this.chatAdd.TabIndex = 20;
@@ -81,8 +86,9 @@
             // 
             // btnExit
             // 
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnExit.Location = new System.Drawing.Point(397, 318);
+            this.btnExit.Location = new System.Drawing.Point(589, 458);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(139, 32);
             this.btnExit.TabIndex = 24;
@@ -98,6 +104,7 @@
             this.player1card1.Size = new System.Drawing.Size(71, 96);
             this.player1card1.TabIndex = 25;
             this.player1card1.TabStop = false;
+            this.player1card1.Click += new System.EventHandler(this.card_Click);
             // 
             // player1card2
             // 
@@ -107,6 +114,7 @@
             this.player1card2.Size = new System.Drawing.Size(71, 96);
             this.player1card2.TabIndex = 26;
             this.player1card2.TabStop = false;
+            this.player1card2.Click += new System.EventHandler(this.card_Click);
             // 
             // player1card3
             // 
@@ -116,6 +124,7 @@
             this.player1card3.Size = new System.Drawing.Size(71, 96);
             this.player1card3.TabIndex = 27;
             this.player1card3.TabStop = false;
+            this.player1card3.Click += new System.EventHandler(this.card_Click);
             // 
             // player1card4
             // 
@@ -125,6 +134,7 @@
             this.player1card4.Size = new System.Drawing.Size(71, 96);
             this.player1card4.TabIndex = 28;
             this.player1card4.TabStop = false;
+            this.player1card4.Click += new System.EventHandler(this.card_Click);
             // 
             // player1card5
             // 
@@ -134,6 +144,7 @@
             this.player1card5.Size = new System.Drawing.Size(71, 96);
             this.player1card5.TabIndex = 29;
             this.player1card5.TabStop = false;
+            this.player1card5.Click += new System.EventHandler(this.card_Click);
             // 
             // player2card5
             // 
@@ -183,34 +194,22 @@
             // backCard
             // 
             this.backCard.InitialImage = null;
-            this.backCard.Location = new System.Drawing.Point(166, 114);
+            this.backCard.Location = new System.Drawing.Point(89, 114);
             this.backCard.Name = "backCard";
             this.backCard.Size = new System.Drawing.Size(71, 96);
             this.backCard.TabIndex = 35;
             this.backCard.TabStop = false;
             // 
-            // btnStand
+            // btnDone
             // 
-            this.btnStand.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnStand.Location = new System.Drawing.Point(166, 318);
-            this.btnStand.Name = "btnStand";
-            this.btnStand.Size = new System.Drawing.Size(148, 32);
-            this.btnStand.TabIndex = 36;
-            this.btnStand.Text = "Stand";
-            this.btnStand.UseVisualStyleBackColor = true;
-            this.btnStand.Click += new System.EventHandler(this.btnStand_Click);
-            // 
-            // btnHit
-            // 
-            this.btnHit.BackColor = System.Drawing.Color.Transparent;
-            this.btnHit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnHit.Location = new System.Drawing.Point(12, 318);
-            this.btnHit.Name = "btnHit";
-            this.btnHit.Size = new System.Drawing.Size(148, 32);
-            this.btnHit.TabIndex = 37;
-            this.btnHit.Text = "HIT";
-            this.btnHit.UseVisualStyleBackColor = false;
-            this.btnHit.Click += new System.EventHandler(this.btnHit_Click);
+            this.btnDone.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnDone.Location = new System.Drawing.Point(132, 458);
+            this.btnDone.Name = "btnDone";
+            this.btnDone.Size = new System.Drawing.Size(63, 32);
+            this.btnDone.TabIndex = 36;
+            this.btnDone.Text = "Done";
+            this.btnDone.UseVisualStyleBackColor = true;
+            this.btnDone.Click += new System.EventHandler(this.btnStand_Click);
             // 
             // contextMenuStrip1
             // 
@@ -219,8 +218,9 @@
             // 
             // btnReset
             // 
+            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnReset.Location = new System.Drawing.Point(320, 318);
+            this.btnReset.Location = new System.Drawing.Point(512, 458);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(71, 32);
             this.btnReset.TabIndex = 38;
@@ -228,16 +228,38 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(166, 114);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(71, 96);
+            this.pictureBox1.TabIndex = 39;
+            this.pictureBox1.TabStop = false;
+            // 
+            // btnTakeCard
+            // 
+            this.btnTakeCard.BackColor = System.Drawing.Color.Transparent;
+            this.btnTakeCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnTakeCard.Location = new System.Drawing.Point(12, 458);
+            this.btnTakeCard.Name = "btnTakeCard";
+            this.btnTakeCard.Size = new System.Drawing.Size(114, 32);
+            this.btnTakeCard.TabIndex = 37;
+            this.btnTakeCard.Text = "Take a card";
+            this.btnTakeCard.UseVisualStyleBackColor = false;
+            this.btnTakeCard.Click += new System.EventHandler(this.btnHit_Click);
+            // 
             // game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaGreen;
-            this.ClientSize = new System.Drawing.Size(548, 360);
+            this.ClientSize = new System.Drawing.Size(740, 502);
             this.ControlBox = false;
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.btnHit);
-            this.Controls.Add(this.btnStand);
+            this.Controls.Add(this.btnTakeCard);
+            this.Controls.Add(this.btnDone);
             this.Controls.Add(this.backCard);
             this.Controls.Add(this.player2card5);
             this.Controls.Add(this.player2card4);
@@ -254,7 +276,7 @@
             this.Controls.Add(this.chatAdd);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "game";
-            this.Text = "Blackjack";
+            this.Text = "Makao";
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card3)).EndInit();
@@ -266,6 +288,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -287,10 +310,11 @@
         private System.Windows.Forms.PictureBox player2card2;
         private System.Windows.Forms.PictureBox player2card1;
         private System.Windows.Forms.PictureBox backCard;
-        private System.Windows.Forms.Button btnStand;
-        private System.Windows.Forms.Button btnHit;
+        private System.Windows.Forms.Button btnDone;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnTakeCard;
     }
 }
 

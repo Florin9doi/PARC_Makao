@@ -209,7 +209,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "lobby";
-            this.Text = "Blackjack";
+            this.Text = "Makao";
             ((System.ComponentModel.ISupportInitialize)(this.gameList)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

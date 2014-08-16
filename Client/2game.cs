@@ -15,7 +15,7 @@ using Connection;
 namespace Client {
     public partial class game : Form {
         private TCPConnection con; // Connection instance
-        private lobby step2_inst; // window instance
+        private lobby lobby_inst; // window instance
         private PictureBox[] pb;
 
         private UInt16 myPosition;
@@ -25,8 +25,8 @@ namespace Client {
         private UInt16 opponentCardPos = 5;
 
         private void setPermission ( bool perm ) {
-            btnHit.Visible = perm;
-            btnStand.Visible = perm;
+            btnTakeCard.Visible = perm;
+            btnDone.Visible = perm;
         }
 
         private string GetHost () {
@@ -45,9 +45,8 @@ namespace Client {
             else return null;
         }
 
-        public game ( TCPConnection con, lobby step2_inst,
-                        String host, String hostCard,
-                        String guest, String guestCard, UInt16 position ) {
+        public game(TCPConnection con, lobby lobby_inst,
+                        String host, String guest, UInt16 position ) {
 
             InitializeComponent ();
 
@@ -62,17 +61,21 @@ namespace Client {
             pb[7] = player2card3;
             pb[8] = player2card4;
             pb[9] = player2card5;
-            backCard.Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\back.bmp" );
-            pb[myCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
-                + @"\Imagini\Card_" + ( position == 1 ? hostCard : guestCard ) + @".bmp" );
-            pb[opponentCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
-                + @"\Imagini\Card_" + ( position == 1 ? guestCard : hostCard ) + @".bmp" );
+            backCard.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+            //pb[myCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
+            //    + @"\Imagini\Card_" + ( position == 1 ? hostCard : guestCard ) + @".bmp" );
+            //pb[opponentCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
+            //    + @"\Imagini\Card_" + ( position == 1 ? guestCard : hostCard ) + @".bmp" );
 
             this.con = con;
             con.OnExceptionRaised += con_OnExceptionRaised;
             con.OnReceiveCompleted += con_OnReceiveCompleted;
 
-            this.step2_inst = step2_inst;
+            
+            myCardPos = 0;
+            opponentCardPos = 5;
+
+            this.lobby_inst = lobby_inst;
             myPosition = position;
             myName = position == 1 ? host : guest;
             opponentName = position == 1 ? guest : host;
@@ -83,8 +86,8 @@ namespace Client {
         void con_OnExceptionRaised ( object sender, ExceptionRaiseEventArgs args ) {
             if ( con != null )
                 con.send ( Encoding.Unicode.GetBytes ( "0GE_" + myName ) );
-            if ( step2_inst != null )
-                step2_inst.Show ();
+            if (lobby_inst != null)
+                lobby_inst.Show();
             this.Hide ();
         }
 
@@ -98,23 +101,18 @@ namespace Client {
 
             // move received
             if ( text.StartsWith ( "0GM_" ) ) {
-                string[] moves = text.Split ( new string[] { "0GM_" }, StringSplitOptions.RemoveEmptyEntries );
-                foreach ( string move in moves ) {
-                    string[] tmp = move.Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
-
+                string[] tmp = text.Substring(4).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     if ( tmp[0].Equals ( myName ) && tmp.Length == 3 ) { // myCard
-                        pb[myCardPos++].Image =
-                            Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[2] ).ToString () + @".bmp" );
+                        pb[myCardPos].Image =
+                                Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[1] ).ToString () + @".bmp" );
+                        pb[myCardPos++].Tag = tmp[1];
                     } else if ( tmp[0].Equals ( opponentName ) && tmp.Length == 3 ) { // oponentCard
-                        if ( opponentCardPos == 5 )
-                            pb[opponentCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[2] ).ToString () + @".bmp" );
-                        else
-                            pb[opponentCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\back.bmp" );
+                        pb[opponentCardPos].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+                        pb[opponentCardPos++].Tag = tmp[1];
                     }
 
                     if ( tmp[0].Equals ( myName ) || tmp[0].Equals ( opponentName ) )
-                        setPermission ( myPosition == UInt64.Parse ( tmp[1] ) ? true : false );
-                }
+                        setPermission (myPosition == UInt64.Parse(tmp[1]) ? true : false);
             }
 
             // reset game
@@ -157,7 +155,7 @@ namespace Client {
         // return to lobby
         private void btnExit_Click ( object sender, EventArgs e ) {
             con.send ( Encoding.Unicode.GetBytes ( "0GE_" + GetHost () ) );
-            step2_inst.Show ();
+            lobby_inst.Show();
             this.Hide ();
         }
 
@@ -176,6 +174,11 @@ namespace Client {
         private void btnHit_Click ( object sender, EventArgs e ) {
             setPermission ( false );
             con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 1 ) );
+        }
+
+        private void card_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show( ((PictureBox) sender).Name +"  "+ ((PictureBox) sender).Tag );
         }
     }
 }
