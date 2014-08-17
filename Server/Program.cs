@@ -9,13 +9,11 @@ using System.Net.Sockets;
 
 namespace Server
 {
-    class Program
-    {
+    class Program {
         public const int port = 3000;
         private static TCPConnection con = new TCPConnection();
 
-        public class GameStruct
-        {
+        public class GameStruct {
             public String name1, name2;
             public Dictionary<UInt64, bool> p1cards;
             public Dictionary<UInt64, bool> p2cards;
@@ -29,8 +27,7 @@ namespace Server
             Random rnd;
 
             // GameStruct constructor
-            public GameStruct(string name1, string name2, UInt16 who)
-            {
+            public GameStruct(string name1, string name2, UInt16 who) {
                 this.name1 = name1;
                 this.name2 = name2;
                 p1cards = new Dictionary<UInt64, bool>();
@@ -48,10 +45,8 @@ namespace Server
             }
 
             // get a random card
-            public UInt64 GetCard()
-            {
-                if (cardMax > 0)
-                {
+            public UInt64 GetCard() {
+                if (cardMax > 0) {
                     UInt64 retPos = (UInt64)rnd.Next(0, (int)cardMax);
                     UInt64 returnCard = cardsArray[retPos];
                     cardMax--;
@@ -63,8 +58,7 @@ namespace Server
             }
 
             // player choosed to stand
-            public void SetStand(UInt64 player, UInt64 state)
-            {
+            public void SetStand(UInt64 player, UInt64 state) {
                 if (player == 1)
                     p1stay = state;
                 else if (player == 2)
@@ -72,8 +66,7 @@ namespace Server
             }
 
             // get next player
-            public UInt64 GetNext()
-            {
+            public UInt64 GetNext() {
                 if (who == 1 && p2stay == 0)
                     who = 2;
                 else if (who == 1 && p2stay > 0)
@@ -83,6 +76,14 @@ namespace Server
                 else if (who == 2 && p1stay > 0)
                     who = 2;
                 return who;
+            }
+
+            internal void SendStatus() {
+                String msg = "0GM_" + name1 + "," + who;
+                foreach (var card in p1cards) msg += "," + card.Key;
+                msg += ";" + name2 + "," + who;
+                foreach (var card in p2cards) msg += "," + card.Key;
+                con.send(Encoding.Unicode.GetBytes( msg ));
             }
         } // end of GameStruct
 
@@ -147,18 +148,17 @@ namespace Server
                 //start game
                 con.send(Encoding.Unicode.GetBytes("0GS_" + player[0] + ";" + 1));
                 con.send(Encoding.Unicode.GetBytes("0GJ_" + player[0] + ";" + player[1] ) );
+                System.Threading.Thread.Sleep(500);
 
                 for (UInt64 i = 1; i <= 10; i++) {
-                    System.Threading.Thread.Sleep(500);
                     UInt64 card = gameRooms[gamePointer[player[0]]].GetCard();
                     if (i % 2 == 1) {
                         gameRooms[gamePointer[player[0]]].p1cards.Add( card, true);
-                        con.send(Encoding.Unicode.GetBytes( "0GM_" + player[0] + ";" + card + ";" + 1 ));
                     } else {
-                        gameRooms[gamePointer[player[1]]].p2cards.Add( card, true);
-                        con.send(Encoding.Unicode.GetBytes("0GM_" + player[1] + ";" + card + ";" + 2));            
+                        gameRooms[gamePointer[player[1]]].p2cards.Add( card, true);           
                     }
                 }
+                gameRooms[gamePointer[player[0]]].SendStatus();
             }
 
             // exit game

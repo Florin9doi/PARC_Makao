@@ -22,11 +22,11 @@ namespace Client {
         private String myName;
         private UInt16 myCardPos = 0;
         private String opponentName;
-        private UInt16 opponentCardPos = 5;
+        private UInt16 opponentCardPos = 10;
 
         private void setPermission ( bool perm ) {
-            btnTakeCard.Visible = perm;
-            btnDone.Visible = perm;
+            //btnTakeCard.Visible = perm;
+            //btnDone.Visible = perm;
         }
 
         private string GetHost () {
@@ -50,22 +50,28 @@ namespace Client {
 
             InitializeComponent ();
 
-            pb = new PictureBox[10];
+            pb = new PictureBox[20];
             pb[0] = player1card1;
             pb[1] = player1card2;
             pb[2] = player1card3;
             pb[3] = player1card4;
             pb[4] = player1card5;
-            pb[5] = player2card1;
-            pb[6] = player2card2;
-            pb[7] = player2card3;
-            pb[8] = player2card4;
-            pb[9] = player2card5;
+            pb[5] = player1card6;
+            pb[6] = player1card7;
+            pb[7] = player1card8;
+            pb[8] = player1card9;
+            pb[9] = player1card10;
+            pb[10] = player2card1;
+            pb[11] = player2card2;
+            pb[12] = player2card3;
+            pb[13] = player2card4;
+            pb[14] = player2card5;
+            pb[15] = player2card6;
+            pb[16] = player2card7;
+            pb[17] = player2card8;
+            pb[18] = player2card9;
+            pb[19] = player2card10;
             backCard.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
-            //pb[myCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
-            //    + @"\Imagini\Card_" + ( position == 1 ? hostCard : guestCard ) + @".bmp" );
-            //pb[opponentCardPos++].Image = Image.FromFile ( Directory.GetCurrentDirectory ()
-            //    + @"\Imagini\Card_" + ( position == 1 ? guestCard : hostCard ) + @".bmp" );
 
             this.con = con;
             con.OnExceptionRaised += con_OnExceptionRaised;
@@ -101,18 +107,35 @@ namespace Client {
 
             // move received
             if ( text.StartsWith ( "0GM_" ) ) {
-                string[] tmp = text.Substring(4).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    if ( tmp[0].Equals ( myName ) && tmp.Length == 3 ) { // myCard
-                        pb[myCardPos].Image =
-                                Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[1] ).ToString () + @".bmp" );
-                        pb[myCardPos++].Tag = tmp[1];
-                    } else if ( tmp[0].Equals ( opponentName ) && tmp.Length == 3 ) { // oponentCard
-                        pb[opponentCardPos].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
-                        pb[opponentCardPos++].Tag = tmp[1];
+                // refresh screen
+                string[] players = text.Substring(4).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var player in players) {
+                    string[] tmp = player.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    if ( tmp[0].Equals ( myName ) /*&& tmp.Length == 3*/ ) { // myCard
+                        for (int i = 2; i < tmp.Length && i <= 11; i++) {
+                            pb[i-2].Image =
+                                    Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[i] ).ToString () + @".bmp" );
+                            pb[i-2].Tag = tmp[i];
+                        }
+                        for (int i = tmp.Length; i <= 11; i++) {
+                            pb[i-2].Image = null;
+                            pb[i-2].Tag = null;
+                        }
+                    } else if ( tmp[0].Equals ( opponentName ) /*&& tmp.Length == 3*/ ) { // oponentCard
+                        for (int i = 2; i < tmp.Length && i <= 11; i++) {
+                            pb[i + 8].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+                                    Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[i]).ToString() + @".bmp");                                    
+                            pb[i+8].Tag = tmp[i];
+                        }
+                        for (int i = tmp.Length; i <= 11; i++) {
+                            pb[i+8].Image = null;
+                            pb[i+8].Tag = null;
+                        }
                     }
 
                     if ( tmp[0].Equals ( myName ) || tmp[0].Equals ( opponentName ) )
                         setPermission (myPosition == UInt64.Parse(tmp[1]) ? true : false);
+                }
             }
 
             // reset game
@@ -120,7 +143,7 @@ namespace Client {
                 for ( int i = 0; i < 10; i++ )
                     pb[i].Image = null;
                 myCardPos = 0;
-                opponentCardPos = 5;
+                opponentCardPos = 10;
                 chatOut.Text = "";
                 setPermission ( myPosition == 1 ? true : false );
             }
@@ -164,17 +187,17 @@ namespace Client {
             con.send ( Encoding.Unicode.GetBytes ( "0GR_" + GetHost () ) );
         }
 
-        // Stand
-        private void btnStand_Click ( object sender, EventArgs e ) {
-            setPermission ( false );
-            con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 0 ) );
-        }
+        //// Stand
+        //private void btnStand_Click ( object sender, EventArgs e ) {
+        //    setPermission ( false );
+        //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 0 ) );
+        //}
 
-        // Hit
-        private void btnHit_Click ( object sender, EventArgs e ) {
-            setPermission ( false );
-            con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 1 ) );
-        }
+        //// Hit
+        //private void btnHit_Click ( object sender, EventArgs e ) {
+        //    setPermission ( false );
+        //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 1 ) );
+        //}
 
         private void card_Click(object sender, EventArgs e)
         {

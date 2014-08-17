@@ -43,11 +43,19 @@
             this.player2card2 = new System.Windows.Forms.PictureBox();
             this.player2card1 = new System.Windows.Forms.PictureBox();
             this.backCard = new System.Windows.Forms.PictureBox();
-            this.btnDone = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnReset = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnTakeCard = new System.Windows.Forms.Button();
+            this.player2card6 = new System.Windows.Forms.PictureBox();
+            this.player2card7 = new System.Windows.Forms.PictureBox();
+            this.player2card8 = new System.Windows.Forms.PictureBox();
+            this.player2card9 = new System.Windows.Forms.PictureBox();
+            this.player2card10 = new System.Windows.Forms.PictureBox();
+            this.player1card6 = new System.Windows.Forms.PictureBox();
+            this.player1card7 = new System.Windows.Forms.PictureBox();
+            this.player1card8 = new System.Windows.Forms.PictureBox();
+            this.player1card9 = new System.Windows.Forms.PictureBox();
+            this.player1card10 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card3)).BeginInit();
@@ -60,6 +68,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card10)).BeginInit();
             this.SuspendLayout();
             // 
             // chatOut
@@ -67,18 +85,18 @@
             this.chatOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chatOut.BackColor = System.Drawing.Color.White;
-            this.chatOut.Location = new System.Drawing.Point(589, 12);
+            this.chatOut.Location = new System.Drawing.Point(785, 12);
             this.chatOut.Multiline = true;
             this.chatOut.Name = "chatOut";
             this.chatOut.ReadOnly = true;
             this.chatOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.chatOut.Size = new System.Drawing.Size(139, 414);
+            this.chatOut.Size = new System.Drawing.Size(139, 276);
             this.chatOut.TabIndex = 21;
             // 
             // chatAdd
             // 
             this.chatAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chatAdd.Location = new System.Drawing.Point(589, 432);
+            this.chatAdd.Location = new System.Drawing.Point(785, 294);
             this.chatAdd.Name = "chatAdd";
             this.chatAdd.Size = new System.Drawing.Size(139, 20);
             this.chatAdd.TabIndex = 20;
@@ -88,7 +106,7 @@
             // 
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnExit.Location = new System.Drawing.Point(589, 458);
+            this.btnExit.Location = new System.Drawing.Point(785, 320);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(139, 32);
             this.btnExit.TabIndex = 24;
@@ -194,22 +212,12 @@
             // backCard
             // 
             this.backCard.InitialImage = null;
-            this.backCard.Location = new System.Drawing.Point(89, 114);
+            this.backCard.Location = new System.Drawing.Point(320, 114);
             this.backCard.Name = "backCard";
             this.backCard.Size = new System.Drawing.Size(71, 96);
             this.backCard.TabIndex = 35;
             this.backCard.TabStop = false;
-            // 
-            // btnDone
-            // 
-            this.btnDone.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnDone.Location = new System.Drawing.Point(132, 458);
-            this.btnDone.Name = "btnDone";
-            this.btnDone.Size = new System.Drawing.Size(63, 32);
-            this.btnDone.TabIndex = 36;
-            this.btnDone.Text = "Done";
-            this.btnDone.UseVisualStyleBackColor = true;
-            this.btnDone.Click += new System.EventHandler(this.btnStand_Click);
+            this.backCard.Click += new System.EventHandler(this.card_Click);
             // 
             // contextMenuStrip1
             // 
@@ -220,7 +228,7 @@
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnReset.Location = new System.Drawing.Point(512, 458);
+            this.btnReset.Location = new System.Drawing.Point(708, 320);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(71, 32);
             this.btnReset.TabIndex = 38;
@@ -231,35 +239,126 @@
             // pictureBox1
             // 
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(166, 114);
+            this.pictureBox1.Location = new System.Drawing.Point(397, 114);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(71, 96);
             this.pictureBox1.TabIndex = 39;
             this.pictureBox1.TabStop = false;
             // 
-            // btnTakeCard
+            // player2card6
             // 
-            this.btnTakeCard.BackColor = System.Drawing.Color.Transparent;
-            this.btnTakeCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnTakeCard.Location = new System.Drawing.Point(12, 458);
-            this.btnTakeCard.Name = "btnTakeCard";
-            this.btnTakeCard.Size = new System.Drawing.Size(114, 32);
-            this.btnTakeCard.TabIndex = 37;
-            this.btnTakeCard.Text = "Take a card";
-            this.btnTakeCard.UseVisualStyleBackColor = false;
-            this.btnTakeCard.Click += new System.EventHandler(this.btnHit_Click);
+            this.player2card6.InitialImage = null;
+            this.player2card6.Location = new System.Drawing.Point(397, 12);
+            this.player2card6.Name = "player2card6";
+            this.player2card6.Size = new System.Drawing.Size(71, 96);
+            this.player2card6.TabIndex = 40;
+            this.player2card6.TabStop = false;
+            // 
+            // player2card7
+            // 
+            this.player2card7.InitialImage = null;
+            this.player2card7.Location = new System.Drawing.Point(474, 12);
+            this.player2card7.Name = "player2card7";
+            this.player2card7.Size = new System.Drawing.Size(71, 96);
+            this.player2card7.TabIndex = 41;
+            this.player2card7.TabStop = false;
+            // 
+            // player2card8
+            // 
+            this.player2card8.InitialImage = null;
+            this.player2card8.Location = new System.Drawing.Point(551, 12);
+            this.player2card8.Name = "player2card8";
+            this.player2card8.Size = new System.Drawing.Size(71, 96);
+            this.player2card8.TabIndex = 42;
+            this.player2card8.TabStop = false;
+            // 
+            // player2card9
+            // 
+            this.player2card9.InitialImage = null;
+            this.player2card9.Location = new System.Drawing.Point(628, 12);
+            this.player2card9.Name = "player2card9";
+            this.player2card9.Size = new System.Drawing.Size(71, 96);
+            this.player2card9.TabIndex = 43;
+            this.player2card9.TabStop = false;
+            // 
+            // player2card10
+            // 
+            this.player2card10.InitialImage = null;
+            this.player2card10.Location = new System.Drawing.Point(705, 12);
+            this.player2card10.Name = "player2card10";
+            this.player2card10.Size = new System.Drawing.Size(71, 96);
+            this.player2card10.TabIndex = 44;
+            this.player2card10.TabStop = false;
+            // 
+            // player1card6
+            // 
+            this.player1card6.InitialImage = null;
+            this.player1card6.Location = new System.Drawing.Point(397, 216);
+            this.player1card6.Name = "player1card6";
+            this.player1card6.Size = new System.Drawing.Size(71, 96);
+            this.player1card6.TabIndex = 45;
+            this.player1card6.TabStop = false;
+            this.player1card6.Click += new System.EventHandler(this.card_Click);
+            // 
+            // player1card7
+            // 
+            this.player1card7.InitialImage = null;
+            this.player1card7.Location = new System.Drawing.Point(474, 216);
+            this.player1card7.Name = "player1card7";
+            this.player1card7.Size = new System.Drawing.Size(71, 96);
+            this.player1card7.TabIndex = 46;
+            this.player1card7.TabStop = false;
+            this.player1card7.Click += new System.EventHandler(this.card_Click);
+            // 
+            // player1card8
+            // 
+            this.player1card8.InitialImage = null;
+            this.player1card8.Location = new System.Drawing.Point(551, 216);
+            this.player1card8.Name = "player1card8";
+            this.player1card8.Size = new System.Drawing.Size(71, 96);
+            this.player1card8.TabIndex = 47;
+            this.player1card8.TabStop = false;
+            this.player1card8.Click += new System.EventHandler(this.card_Click);
+            // 
+            // player1card9
+            // 
+            this.player1card9.InitialImage = null;
+            this.player1card9.Location = new System.Drawing.Point(628, 216);
+            this.player1card9.Name = "player1card9";
+            this.player1card9.Size = new System.Drawing.Size(71, 96);
+            this.player1card9.TabIndex = 48;
+            this.player1card9.TabStop = false;
+            this.player1card9.Click += new System.EventHandler(this.card_Click);
+            // 
+            // player1card10
+            // 
+            this.player1card10.InitialImage = null;
+            this.player1card10.Location = new System.Drawing.Point(705, 216);
+            this.player1card10.Name = "player1card10";
+            this.player1card10.Size = new System.Drawing.Size(71, 96);
+            this.player1card10.TabIndex = 49;
+            this.player1card10.TabStop = false;
+            this.player1card10.Click += new System.EventHandler(this.card_Click);
             // 
             // game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaGreen;
-            this.ClientSize = new System.Drawing.Size(740, 502);
+            this.ClientSize = new System.Drawing.Size(936, 364);
             this.ControlBox = false;
+            this.Controls.Add(this.player1card10);
+            this.Controls.Add(this.player1card9);
+            this.Controls.Add(this.player1card8);
+            this.Controls.Add(this.player1card7);
+            this.Controls.Add(this.player1card6);
+            this.Controls.Add(this.player2card10);
+            this.Controls.Add(this.player2card9);
+            this.Controls.Add(this.player2card8);
+            this.Controls.Add(this.player2card7);
+            this.Controls.Add(this.player2card6);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.btnTakeCard);
-            this.Controls.Add(this.btnDone);
             this.Controls.Add(this.backCard);
             this.Controls.Add(this.player2card5);
             this.Controls.Add(this.player2card4);
@@ -289,6 +388,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player2card10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player1card10)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -310,11 +419,19 @@
         private System.Windows.Forms.PictureBox player2card2;
         private System.Windows.Forms.PictureBox player2card1;
         private System.Windows.Forms.PictureBox backCard;
-        private System.Windows.Forms.Button btnDone;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnTakeCard;
+        private System.Windows.Forms.PictureBox player2card6;
+        private System.Windows.Forms.PictureBox player2card7;
+        private System.Windows.Forms.PictureBox player2card8;
+        private System.Windows.Forms.PictureBox player2card9;
+        private System.Windows.Forms.PictureBox player2card10;
+        private System.Windows.Forms.PictureBox player1card6;
+        private System.Windows.Forms.PictureBox player1card7;
+        private System.Windows.Forms.PictureBox player1card8;
+        private System.Windows.Forms.PictureBox player1card9;
+        private System.Windows.Forms.PictureBox player1card10;
     }
 }
 
