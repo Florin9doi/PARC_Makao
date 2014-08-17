@@ -20,13 +20,13 @@ namespace Client {
 
         private UInt16 myPosition;
         private String myName;
-        private UInt16 myCardPos = 0;
         private String opponentName;
-        private UInt16 opponentCardPos = 10;
 
         private void setPermission ( bool perm ) {
-            //btnTakeCard.Visible = perm;
-            //btnDone.Visible = perm;
+            if (perm)
+                pbStatus.BackColor = Color.Green;
+            else
+                pbStatus.BackColor = Color.Red;
         }
 
         private string GetHost () {
@@ -76,10 +76,6 @@ namespace Client {
             this.con = con;
             con.OnExceptionRaised += con_OnExceptionRaised;
             con.OnReceiveCompleted += con_OnReceiveCompleted;
-
-            
-            myCardPos = 0;
-            opponentCardPos = 5;
 
             this.lobby_inst = lobby_inst;
             myPosition = position;
@@ -142,8 +138,6 @@ namespace Client {
             else if ( text.StartsWith ( "0GR_" ) && text.Substring ( 4 ).Equals ( GetHost () ) ) {
                 for ( int i = 0; i < 10; i++ )
                     pb[i].Image = null;
-                myCardPos = 0;
-                opponentCardPos = 10;
                 chatOut.Text = "";
                 setPermission ( myPosition == 1 ? true : false );
             }
@@ -165,6 +159,9 @@ namespace Client {
                     chatOut.Text += text.Substring ( 4 );
                 }
             }
+            
+            else
+                MessageBox.Show(text);
         }
 
         // send chat message
@@ -187,21 +184,13 @@ namespace Client {
             con.send ( Encoding.Unicode.GetBytes ( "0GR_" + GetHost () ) );
         }
 
-        //// Stand
-        //private void btnStand_Click ( object sender, EventArgs e ) {
-        //    setPermission ( false );
-        //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 0 ) );
-        //}
-
-        //// Hit
-        //private void btnHit_Click ( object sender, EventArgs e ) {
-        //    setPermission ( false );
-        //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + myName + ";" + myPosition + ";" + 1 ) );
-        //}
-
-        private void card_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show( ((PictureBox) sender).Name +"  "+ ((PictureBox) sender).Tag );
+        private void card_Click(object sender, EventArgs e) {
+            if (((PictureBox)sender).Name.Equals("backCard"))
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";GC"));
+            else if (((PictureBox)sender).Tag == null)
+                System.Media.SystemSounds.Hand.Play();
+            else
+                MessageBox.Show( ((PictureBox) sender).Name +"  "+ ((PictureBox) sender).Tag );
         }
     }
 }

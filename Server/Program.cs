@@ -57,14 +57,6 @@ namespace Server
                 return 0;
             }
 
-            // player choosed to stand
-            public void SetStand(UInt64 player, UInt64 state) {
-                if (player == 1)
-                    p1stay = state;
-                else if (player == 2)
-                    p2stay = state;
-            }
-
             // get next player
             public UInt64 GetNext() {
                 if (who == 1 && p2stay == 0)
@@ -83,6 +75,7 @@ namespace Server
                 foreach (var card in p1cards) msg += "," + card.Key;
                 msg += ";" + name2 + "," + who;
                 foreach (var card in p2cards) msg += "," + card.Key;
+                Console.WriteLine(msg);
                 con.send(Encoding.Unicode.GetBytes( msg ));
             }
         } // end of GameStruct
@@ -112,7 +105,8 @@ namespace Server
         }
 
         static void con_OnReceiveCompleted(object sender, ReceiveCompletedEventArgs args) {
-            string text = Encoding.Unicode.GetString ( args.data );
+            string text = Encoding.Unicode.GetString(args.data);
+            Console.WriteLine(text);
             IPEndPoint iep = ( args.remoteSock.RemoteEndPoint as IPEndPoint );
             string clientAddr = iep.Address.ToString () + iep.Port;
 
@@ -184,16 +178,14 @@ namespace Server
                 con.send ( Encoding.Unicode.GetBytes ( text ) );
                
                 for (UInt64 i = 1; i <= 10; i++) {
-                    System.Threading.Thread.Sleep(500);
-                    UInt64 card = gameRooms[nrOfGame].GetCard();
+                    UInt64 card = gameRooms[gamePointer[game]].GetCard();
                     if (i % 2 == 1) {
-                        gameRooms[nrOfGame].p1cards.Add(card, true);
-                        con.send(Encoding.Unicode.GetBytes("0GM_" + gameRooms[nrOfGame].name1 + ";" + card));
+                        gameRooms[gamePointer[game]].p1cards.Add(card, true);
                     } else {
-                        gameRooms[nrOfGame].p2cards.Add(card, true);
-                        con.send(Encoding.Unicode.GetBytes("0GM_" + gameRooms[nrOfGame].name2 + ";" + card));            
+                        gameRooms[gamePointer[game]].p2cards.Add(card, true);           
                     }
                 }
+                gameRooms[gamePointer[game]].SendStatus();
             }
 
             // chat
@@ -206,7 +198,17 @@ namespace Server
             else if ( text.StartsWith ( "0GM_" ) ) {
                 string[] tmp = text.Substring ( 4 ).Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
                 if ( gameRooms[gamePointer[tmp[0]]].who == UInt64.Parse ( tmp[1] ) ) { // right player
-                    //if ( UInt64.Parse ( tmp[2] ) == 0 ) { // stand
+                    if ( tmp[2].Equals("GC")  ) { // getCard
+                        UInt64 card = gameRooms[gamePointer[tmp[0]]].GetCard();
+                        if ( gameRooms[gamePointer[tmp[0]]].who == 1) {
+                            gameRooms[gamePointer[tmp[0]]].p1cards.Add(card, true);
+                            gameRooms[gamePointer[tmp[0]]].who = 2;
+                        } else {
+                            gameRooms[gamePointer[tmp[0]]].p2cards.Add(card, true);
+                            gameRooms[gamePointer[tmp[0]]].who = 1;
+                        }
+                        gameRooms[gamePointer[tmp[0]]].SendStatus();
+                    }
                     //    gameRooms[gamePointer[tmp[0]]].SetStand ( UInt64.Parse ( tmp[1] ), true );
                     //    Console.WriteLine ( tmp[0] + " has choosed to stand" );
                     //} else if ( UInt64.Parse ( tmp[2] ) == 1 ) { // hit

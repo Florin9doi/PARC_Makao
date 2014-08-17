@@ -56,6 +56,7 @@
             this.player1card8 = new System.Windows.Forms.PictureBox();
             this.player1card9 = new System.Windows.Forms.PictureBox();
             this.player1card10 = new System.Windows.Forms.PictureBox();
+            this.pbStatus = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card3)).BeginInit();
@@ -78,6 +79,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.player1card8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // chatOut
@@ -340,6 +342,15 @@
             this.player1card10.TabStop = false;
             this.player1card10.Click += new System.EventHandler(this.card_Click);
             // 
+            // pbStatus
+            // 
+            this.pbStatus.BackColor = System.Drawing.Color.Red;
+            this.pbStatus.Location = new System.Drawing.Point(13, 320);
+            this.pbStatus.Name = "pbStatus";
+            this.pbStatus.Size = new System.Drawing.Size(32, 32);
+            this.pbStatus.TabIndex = 50;
+            this.pbStatus.TabStop = false;
+            // 
             // game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -347,6 +358,7 @@
             this.BackColor = System.Drawing.Color.SeaGreen;
             this.ClientSize = new System.Drawing.Size(936, 364);
             this.ControlBox = false;
+            this.Controls.Add(this.pbStatus);
             this.Controls.Add(this.player1card10);
             this.Controls.Add(this.player1card9);
             this.Controls.Add(this.player1card8);
@@ -398,6 +410,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.player1card8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -432,6 +445,7 @@
         private System.Windows.Forms.PictureBox player1card8;
         private System.Windows.Forms.PictureBox player1card9;
         private System.Windows.Forms.PictureBox player1card10;
+        private System.Windows.Forms.PictureBox pbStatus;
     }
 }
 
