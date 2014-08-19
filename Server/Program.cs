@@ -180,14 +180,14 @@ namespace Server
                 con.send ( Encoding.Unicode.GetBytes ( text ) );
                
                 for (UInt64 i = 1; i <= 10; i++) {
-                    UInt64 card = gameRooms[gamePointer[game]].GetCard();
+                    UInt64 card = gameRooms[nrOfGame].GetCard();
                     if (i % 2 == 1) {
-                        gameRooms[gamePointer[game]].p1cards.Add(card, true);
+                        gameRooms[nrOfGame].p1cards.Add(card, true);
                     } else {
-                        gameRooms[gamePointer[game]].p2cards.Add(card, true);           
+                        gameRooms[nrOfGame].p2cards.Add(card, true);           
                     }
                 }
-                gameRooms[gamePointer[game]].SendStatus();
+                gameRooms[nrOfGame].SendStatus();
             }
 
             // chat

@@ -183,7 +183,7 @@ namespace Client {
 
         private void card_Click(object sender, EventArgs e) {
             if (((PictureBox)sender).Name.Equals("backCard"))
-                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";GC"));
+                con.send( Encoding.Unicode.GetBytes( "0GM_" + myName + ";" + myPosition + ";GC" ) );
             else if (((PictureBox)sender).Tag == null)
                 System.Media.SystemSounds.Hand.Play();
             else
