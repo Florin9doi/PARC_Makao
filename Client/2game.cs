@@ -159,9 +159,6 @@ namespace Client {
                     chatOut.Text += text.Substring ( 4 );
                 }
             }
-            
-            else
-                MessageBox.Show(text);
         }
 
         // send chat message

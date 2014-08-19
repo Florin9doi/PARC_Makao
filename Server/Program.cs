@@ -61,21 +61,23 @@ namespace Server
             public UInt64 GetNext() {
                 if (who == 1 && p2stay == 0)
                     who = 2;
-                else if (who == 1 && p2stay > 0)
-                    who = 1;
+                else if (who == 1 && p2stay > 0) {
+                    who = 1; p2stay--;
+                }
                 else if (who == 2 && p1stay == 0)
                     who = 1;
-                else if (who == 2 && p1stay > 0)
-                    who = 2;
+                else if (who == 2 && p1stay > 0) {
+                    who = 2; p1stay--;
+                }
                 return who;
             }
 
-            internal void SendStatus() {
+            public void SendStatus() {
                 String msg = "0GM_" + name1 + "," + who;
                 foreach (var card in p1cards) msg += "," + card.Key;
                 msg += ";" + name2 + "," + who;
                 foreach (var card in p2cards) msg += "," + card.Key;
-                Console.WriteLine(msg);
+                Console.WriteLine( msg );
                 con.send(Encoding.Unicode.GetBytes( msg ));
             }
         } // end of GameStruct
@@ -246,7 +248,7 @@ namespace Server
                     }
                 }
             } else
-                Console.WriteLine ( text );
+                Console.WriteLine ("Error: Unknown command: " + text );
         }
     }
 }
