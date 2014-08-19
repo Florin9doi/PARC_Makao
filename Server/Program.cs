@@ -209,6 +209,7 @@ namespace Server
                             gameRooms[gamePointer[tmp[0]]].p2cards.Add(card, true);
                             gameRooms[gamePointer[tmp[0]]].who = 1;
                         }
+
                         gameRooms[gamePointer[tmp[0]]].SendStatus();
                     }
                     //    gameRooms[gamePointer[tmp[0]]].SetStand ( UInt64.Parse ( tmp[1] ), true );
@@ -243,9 +244,10 @@ namespace Server
                     } else if ( win == 2 ) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name2 ) );
                         Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name2 + " has won !!" );
-                    } else if ( UInt64.Parse ( tmp[2] ) == 0 ) { // stand
-                        con.send ( Encoding.Unicode.GetBytes ( "0GM_" + tmp[0] + ";" + gameRooms[gamePointer[tmp[0]]].GetNext () ) );
                     }
+                    //} else if ( UInt64.Parse ( tmp[2] ) == 0 ) { // stand
+                    //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + tmp[0] + ";" + gameRooms[gamePointer[tmp[0]]].GetNext () ) );
+                    //}
                 }
             } else
                 Console.WriteLine ("Error: Unknown command: " + text );
