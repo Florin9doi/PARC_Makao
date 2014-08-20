@@ -209,22 +209,23 @@ namespace Server
                     if ( tmp[2].Equals("GC")  ) { // getCard
                         gameRooms[gamePointer[tmp[0]]].GetCard( gameRooms[gamePointer[tmp[0]]].who );
                         gameRooms[gamePointer[tmp[0]]].SendStatus();
-                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
-                        Console.WriteLine( "A" );
-                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
-                        Console.WriteLine( "2" );
-                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 2 ) { // 3
-                        Console.WriteLine( "3" );
-                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 3 ) { // 4
-                        Console.WriteLine( "4" );
+                    } else {
+                        gameRooms[gamePointer[tmp[0]]].stack = UInt64.Parse( tmp[2] );
+                        
+                        if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
+                            Console.WriteLine( "A" );
+                        } else if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
+                            gameRooms[gamePointer[tmp[0]]].cardsToTake = 2;
+                        } else if ( UInt64.Parse( tmp[2] ) % 13 == 2 ) { // 3
+                            gameRooms[gamePointer[tmp[0]]].cardsToTake = 3;
+                        } else if ( UInt64.Parse( tmp[2] ) % 13 == 3 ) { // 4
+                            if (gameRooms[gamePointer[tmp[0]]].who == 1)
+                                gameRooms[gamePointer[tmp[0]]].p2stay += 1;
+                            else if (gameRooms[gamePointer[tmp[0]]].who == 2)
+                                gameRooms[gamePointer[tmp[0]]].p1stay += 1;
+                        }
                     }
-                    //    gameRooms[gamePointer[tmp[0]]].SetStand ( UInt64.Parse ( tmp[1] ), true );
-                    //    Console.WriteLine ( tmp[0] + " has choosed to stand" );
-                    //} else if ( UInt64.Parse ( tmp[2] ) == 1 ) { // hit
-                    //    UInt64 card = gameRooms[gamePointer[tmp[0]]].GetCard ( UInt64.Parse ( tmp[1] ) );
-                    //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + tmp[0] + ";" + gameRooms[gamePointer[tmp[0]]].GetNext () + ";" + card ) );
-                    //    Console.WriteLine ( tmp[0] + " has choosed to hit" );
-                    //}
+                    
 
                     UInt64 win = 0;
                     //if ( tmp[0].Equals ( gameRooms[gamePointer[tmp[0]]].name1 ) ) { // player 1

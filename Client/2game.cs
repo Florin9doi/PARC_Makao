@@ -109,6 +109,7 @@ namespace Client {
                     string[] tmp = player.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     if ( tmp[0].Equals ( myName ) /*&& tmp.Length == 3*/ ) { // myCard
                         stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[2]).ToString() + @".bmp");
+                        stack.Tag = tmp[2];
                         for (int i = 3; i < tmp.Length && i <= 12; i++) {
                             pb[i - 3].Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[i] ).ToString () + @".bmp" );
                             pb[i - 3].Tag = tmp[i];
@@ -182,12 +183,26 @@ namespace Client {
         }
 
         // send game action
-        private void card_Click(object sender, EventArgs e) {
+        private void card_Click ( object sender, EventArgs e ) {
+
+            /* get a new card */
             if (((PictureBox)sender).Name.Equals("backCard"))
-                con.send( Encoding.Unicode.GetBytes( "0GM_" + myName + ";" + myPosition + ";GC" ) );
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";GC"));
+
+            /* invalid move */
             else if (((PictureBox)sender).Tag == null)
                 System.Media.SystemSounds.Hand.Play();
-            else
+
+            /* valid move */
+            else if (int.Parse((String)((PictureBox)sender).Tag) / 13 == int.Parse((string)stack.Tag) / 13
+                   || int.Parse((String)((PictureBox)sender).Tag) % 13 == int.Parse((string)stack.Tag) % 13)
+                    // && askforsuit == right color
+                    // || stack % 13 == 2 && card % 13 == 2
+                    // || stack % 13 == 3 && card % 13 == 3
+
+                //if (int.Parse((String)((PictureBox)sender).Tag) % 13 == 0) // A
+                //    ;// TODO: ask for suit
+                //else
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
         }
     }
