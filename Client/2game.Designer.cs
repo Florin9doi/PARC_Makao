@@ -45,7 +45,7 @@
             this.backCard = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnReset = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.stack = new System.Windows.Forms.PictureBox();
             this.player2card6 = new System.Windows.Forms.PictureBox();
             this.player2card7 = new System.Windows.Forms.PictureBox();
             this.player2card8 = new System.Windows.Forms.PictureBox();
@@ -68,7 +68,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card8)).BeginInit();
@@ -238,14 +238,14 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // pictureBox1
+            // stack
             // 
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(397, 114);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(71, 96);
-            this.pictureBox1.TabIndex = 39;
-            this.pictureBox1.TabStop = false;
+            this.stack.InitialImage = null;
+            this.stack.Location = new System.Drawing.Point(397, 114);
+            this.stack.Name = "stack";
+            this.stack.Size = new System.Drawing.Size(71, 96);
+            this.stack.TabIndex = 39;
+            this.stack.TabStop = false;
             // 
             // player2card6
             // 
@@ -369,7 +369,7 @@
             this.Controls.Add(this.player2card8);
             this.Controls.Add(this.player2card7);
             this.Controls.Add(this.player2card6);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.stack);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.backCard);
             this.Controls.Add(this.player2card5);
@@ -399,7 +399,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.player2card2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backCard)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2card8)).EndInit();
@@ -434,7 +434,7 @@
         private System.Windows.Forms.PictureBox backCard;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox stack;
         private System.Windows.Forms.PictureBox player2card6;
         private System.Windows.Forms.PictureBox player2card7;
         private System.Windows.Forms.PictureBox player2card8;

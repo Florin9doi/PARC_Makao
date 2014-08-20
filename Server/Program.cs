@@ -17,6 +17,7 @@ namespace Server
             public String name1, name2;
             public Dictionary<UInt64, bool> p1cards;
             public Dictionary<UInt64, bool> p2cards;
+            public UInt64 stack;
             public UInt64 who;
             public UInt64 p1stay, p2stay;
             public UInt64 cardsToTake;
@@ -35,7 +36,7 @@ namespace Server
                 this.who = who;
                 p1stay = 0; // 4
                 p2stay = 0; // 4
-                cardsToTake = 0; // 2 + 3
+                cardsToTake = 1; // 2 + 3
                 changeSuit = 0; // A
 
                 cardMax = 52;
@@ -44,16 +45,23 @@ namespace Server
                 for (UInt64 i = 0; i < cardMax; i++) cardsArray[i] = i;
             }
 
-            // get a random card
-            public UInt64 GetCard() {
-                if (cardMax > 0) {
+            // get cards
+            public UInt64 GetCard(UInt64 who) {
+                for (UInt64 i = 0; i < cardsToTake && cardMax > 0; i++) {
                     UInt64 retPos = (UInt64)rnd.Next(0, (int)cardMax);
                     UInt64 returnCard = cardsArray[retPos];
                     cardMax--;
                     cardsArray[retPos] = cardsArray[cardMax];
 
-                    return returnCard;
+                    if (who == 1) {
+                        p1cards.Add(returnCard, true);
+                    } else if (who == 2) {
+                        p2cards.Add(returnCard, true);
+                    } else if (who == 3) {
+                        stack = returnCard;
+                    }
                 }
+                cardsToTake = 1;
                 return 0;
             }
 
@@ -73,9 +81,9 @@ namespace Server
             }
 
             public void SendStatus() {
-                String msg = "0GM_" + name1 + "," + who;
+                String msg = "0GM_" + name1 + "," + who + "," + stack;
                 foreach (var card in p1cards) msg += "," + card.Key;
-                msg += ";" + name2 + "," + who;
+                msg += ";" + name2 + "," + who + "," + stack;
                 foreach (var card in p2cards) msg += "," + card.Key;
                 Console.WriteLine( msg );
                 con.send(Encoding.Unicode.GetBytes( msg ));
@@ -146,13 +154,12 @@ namespace Server
                 con.send(Encoding.Unicode.GetBytes("0GJ_" + player[0] + ";" + player[1] ) );
                 System.Threading.Thread.Sleep(500);
 
+                // first card
+                gameRooms[gamePointer[player[0]]].GetCard(3);
+
+                // players cards
                 for (UInt64 i = 1; i <= 10; i++) {
-                    UInt64 card = gameRooms[gamePointer[player[0]]].GetCard();
-                    if (i % 2 == 1) {
-                        gameRooms[gamePointer[player[0]]].p1cards.Add( card, true);
-                    } else {
-                        gameRooms[gamePointer[player[1]]].p2cards.Add( card, true);           
-                    }
+                    gameRooms[gamePointer[player[0]]].GetCard(i % 2 + 1); // 1>2>1>2
                 }
                 gameRooms[gamePointer[player[0]]].SendStatus();
             }
@@ -179,13 +186,12 @@ namespace Server
 
                 con.send ( Encoding.Unicode.GetBytes ( text ) );
                
+                // first card
+                gameRooms[nrOfGame].GetCard(3);
+
+                // players cards
                 for (UInt64 i = 1; i <= 10; i++) {
-                    UInt64 card = gameRooms[nrOfGame].GetCard();
-                    if (i % 2 == 1) {
-                        gameRooms[nrOfGame].p1cards.Add(card, true);
-                    } else {
-                        gameRooms[nrOfGame].p2cards.Add(card, true);           
-                    }
+                    gameRooms[nrOfGame].GetCard(i % 2 + 1); // 1>2>1>2
                 }
                 gameRooms[nrOfGame].SendStatus();
             }
@@ -201,16 +207,16 @@ namespace Server
                 string[] tmp = text.Substring ( 4 ).Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
                 if ( gameRooms[gamePointer[tmp[0]]].who == UInt64.Parse ( tmp[1] ) ) { // right player
                     if ( tmp[2].Equals("GC")  ) { // getCard
-                        UInt64 card = gameRooms[gamePointer[tmp[0]]].GetCard();
-                        if ( gameRooms[gamePointer[tmp[0]]].who == 1) {
-                            gameRooms[gamePointer[tmp[0]]].p1cards.Add(card, true);
-                            gameRooms[gamePointer[tmp[0]]].who = 2;
-                        } else {
-                            gameRooms[gamePointer[tmp[0]]].p2cards.Add(card, true);
-                            gameRooms[gamePointer[tmp[0]]].who = 1;
-                        }
-
+                        gameRooms[gamePointer[tmp[0]]].GetCard( gameRooms[gamePointer[tmp[0]]].who );
                         gameRooms[gamePointer[tmp[0]]].SendStatus();
+                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
+                        Console.WriteLine( "A" );
+                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
+                        Console.WriteLine( "2" );
+                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 2 ) { // 3
+                        Console.WriteLine( "3" );
+                    } else if ( UInt64.Parse( tmp[2] ) % 13 == 3 ) { // 4
+                        Console.WriteLine( "4" );
                     }
                     //    gameRooms[gamePointer[tmp[0]]].SetStand ( UInt64.Parse ( tmp[1] ), true );
                     //    Console.WriteLine ( tmp[0] + " has choosed to stand" );
@@ -245,6 +251,7 @@ namespace Server
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name2 ) );
                         Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name2 + " has won !!" );
                     }
+                    // TODO: set next player 
                     //} else if ( UInt64.Parse ( tmp[2] ) == 0 ) { // stand
                     //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + tmp[0] + ";" + gameRooms[gamePointer[tmp[0]]].GetNext () ) );
                     //}

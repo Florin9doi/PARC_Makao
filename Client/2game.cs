@@ -108,24 +108,24 @@ namespace Client {
                 foreach (var player in players) {
                     string[] tmp = player.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     if ( tmp[0].Equals ( myName ) /*&& tmp.Length == 3*/ ) { // myCard
-                        for (int i = 2; i < tmp.Length && i <= 11; i++) {
-                            pb[i-2].Image =
-                                    Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[i] ).ToString () + @".bmp" );
-                            pb[i-2].Tag = tmp[i];
+                        stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[2]).ToString() + @".bmp");
+                        for (int i = 3; i < tmp.Length && i <= 12; i++) {
+                            pb[i - 3].Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[i] ).ToString () + @".bmp" );
+                            pb[i - 3].Tag = tmp[i];
                         }
-                        for (int i = tmp.Length; i <= 11; i++) {
-                            pb[i-2].Image = null;
-                            pb[i-2].Tag = null;
+                        for (int i = tmp.Length; i <= 12; i++) {
+                            pb[i - 3].Image = null;
+                            pb[i - 3].Tag = null;
                         }
                     } else if ( tmp[0].Equals ( opponentName ) /*&& tmp.Length == 3*/ ) { // oponentCard
-                        for (int i = 2; i < tmp.Length && i <= 11; i++) {
-                            pb[i + 8].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+                        for (int i = 3; i < tmp.Length && i <= 12; i++) {
+                            pb[i + 7].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
                                     Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[i]).ToString() + @".bmp");                                    
-                            pb[i+8].Tag = tmp[i];
+                            pb[i + 7].Tag = tmp[i];
                         }
-                        for (int i = tmp.Length; i <= 11; i++) {
-                            pb[i+8].Image = null;
-                            pb[i+8].Tag = null;
+                        for (int i = tmp.Length; i <= 12; i++) {
+                            pb[i + 7].Image = null;
+                            pb[i + 7].Tag = null;
                         }
                     }
 
@@ -188,7 +188,7 @@ namespace Client {
             else if (((PictureBox)sender).Tag == null)
                 System.Media.SystemSounds.Hand.Play();
             else
-                MessageBox.Show( ((PictureBox) sender).Name +"  "+ ((PictureBox) sender).Tag );
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
         }
     }
 }
