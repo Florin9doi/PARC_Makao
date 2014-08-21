@@ -81,10 +81,9 @@ namespace Server
             }
 
             public void SendStatus() {
-                String msg = "0GM_" + name1 + "," + who + "," + stack + ";"; // TODO add cardToGive, cardsToTake
+                String msg = "0GM_" + name1 + "," + who + "," + stack + "," + cardsToTake + "," + changeSuit + ";";
                 foreach (var card in p1cards) msg += "," + card.Key;
                 msg += ";";
-                //msg += ";" + name2 + "," + who + "," + stack;
                 foreach (var card in p2cards) msg += "," + card.Key;
                 Console.WriteLine( msg );
                 con.send(Encoding.Unicode.GetBytes( msg ));

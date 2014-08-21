@@ -16,7 +16,7 @@ namespace Client {
     public partial class game : Form {
         private TCPConnection con; // Connection instance
         private lobby lobby_inst; // window instance
-        private PictureBox[] pb;
+        private PictureBox[] pb, cs;
 
         private UInt16 myPosition;
         private String myName;
@@ -83,6 +83,15 @@ namespace Client {
             opponentName = position == 1 ? guest : host;
             this.Text = myName;
             setPermission ( myPosition == 1 ? true : false );
+
+            cs[0] = suit_0;
+            cs[1] = suit_1;
+            cs[2] = suit_2;
+            cs[3] = suit_3;
+            suit_0.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_0.png");
+            suit_1.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_1.png");
+            suit_2.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_2.png");
+            suit_3.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_3.png");
         }
 
         void con_OnExceptionRaised ( object sender, ExceptionRaiseEventArgs args ) {
@@ -108,10 +117,30 @@ namespace Client {
                 if (players[0].StartsWith(GetHost() + ",")) { // this game ?
 
                     string[] g_gen = players[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    // who
                     setPermission(myPosition == UInt64.Parse(g_gen[1]) ? true : false);
+                    // stack
                     stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(g_gen[2]).ToString() + @".bmp");
                     stack.Tag = g_gen[2];
-                    //TODO: cardsToTake, cardToGive
+                    // cardsToTake
+                    if (int.Parse(g_gen[3]) > 1)
+                        cardsToTake.Text = "Cards to take: " + g_gen[3];
+                    else
+                        cardsToTake.Text = "";
+                    // changeSuit
+                    if (int.Parse(g_gen[4]) > 0) {
+                        changeSuit_gb.Visible = true;
+                        changeSuit_gb.Tag = int.Parse(g_gen[4])-1;
+                        for (int i = 0; i < 4; i++)
+                            if (i + 1 == int.Parse(g_gen[4]))
+                                cs[i].Visible = true;
+                            else
+                                cs[i].Visible = false;
+                    }
+                    else {
+                        changeSuit_gb.Visible = false;
+                        changeSuit_gb.Tag = null;
+                    }
 
                     string[] myCards = null, opCards = null;
                     if (myPosition == 1) {
@@ -123,7 +152,7 @@ namespace Client {
                     }
 
                     // myCards
-                    for (int i = 0; i < myCards.Length && i <= 10; i++)
+                    for (int i = 0; i < myCards.Length && i < 10; i++)
                     {
                         pb[i].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(myCards[i]).ToString() + @".bmp");
                         pb[i].Tag = myCards[i];
@@ -134,7 +163,7 @@ namespace Client {
                     }
 
                     // opCards
-                    for (int i = 0; i < opCards.Length && i <= 10; i++) {
+                    for (int i = 0; i < opCards.Length && i < 10; i++) {
                         pb[i + 10].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
                                 Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(opCards[i]).ToString() + @".bmp");
                         pb[i + 10].Tag = opCards[i];
@@ -188,6 +217,7 @@ namespace Client {
             this.Hide ();
         }
 
+
         // reset table
         private void btnReset_Click ( object sender, EventArgs e ) {
             con.send ( Encoding.Unicode.GetBytes ( "0GR_" + GetHost () ) );
@@ -205,16 +235,31 @@ namespace Client {
                 System.Media.SystemSounds.Hand.Play();
 
             /* valid move */
-            else if (int.Parse((String)((PictureBox)sender).Tag) / 13 == int.Parse((string)stack.Tag) / 13
-                   || int.Parse((String)((PictureBox)sender).Tag) % 13 == int.Parse((string)stack.Tag) % 13)
-                    // && askforsuit == right color
-                    // || stack % 13 == 2 && card % 13 == 2
-                    // || stack % 13 == 3 && card % 13 == 3
-
-                //if (int.Parse((String)((PictureBox)sender).Tag) % 13 == 0) // A
-                //    ;// TODO: ask for suit
-                //else
+            else if ( int.Parse((string)stack.Tag) / 13 == 2 || int.Parse((string)stack.Tag) / 13 == 3 ) {
+                if (int.Parse((string)stack.Tag) / 13 == 2 && int.Parse((String)((PictureBox)sender).Tag) == 2
+                    || int.Parse((string)stack.Tag) / 13 == 3 && int.Parse((String)((PictureBox)sender).Tag) == 3)
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
+            }
+            else if ( changeSuit_gb.Tag != null && (int)changeSuit_gb.Tag == int.Parse((String)((PictureBox)sender).Tag) / 13
+                    || changeSuit_gb.Tag == null && int.Parse((String)((PictureBox)sender).Tag) / 13 == int.Parse((string)stack.Tag) / 13
+                    || changeSuit_gb.Tag == null && int.Parse((String)((PictureBox)sender).Tag) % 13 == int.Parse((string)stack.Tag) % 13) {
+                if (int.Parse((String)((PictureBox)sender).Tag) % 13 == 0) {
+                    for (int i = 0; i < 4; i++)
+                        cs[i].Visible = true;
+                    changeSuit_gb.Visible = true;
+                } else {
+                    con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
+                    changeSuit_gb.Tag = null;
+                }
+            }
+        }
+
+        private void csuit_Click(object sender, EventArgs e) {
+            if (changeSuit_gb.Tag == null) {
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag 
+                    + ";" + (String)((PictureBox)sender).Name.Substring(4).ToString()));
+                changeSuit_gb.Visible = false;
+            }
         }
     }
 }

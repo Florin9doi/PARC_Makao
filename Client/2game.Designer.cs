@@ -57,6 +57,13 @@
             this.player1card9 = new System.Windows.Forms.PictureBox();
             this.player1card10 = new System.Windows.Forms.PictureBox();
             this.pbStatus = new System.Windows.Forms.PictureBox();
+            this.cardsToTake = new System.Windows.Forms.Label();
+            this.changeSuit_gb = new System.Windows.Forms.Panel();
+            this.suit_3 = new System.Windows.Forms.PictureBox();
+            this.suit_2 = new System.Windows.Forms.PictureBox();
+            this.suit_1 = new System.Windows.Forms.PictureBox();
+            this.suit_0 = new System.Windows.Forms.PictureBox();
+            this.changeSuit = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card3)).BeginInit();
@@ -80,6 +87,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.player1card9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).BeginInit();
+            this.changeSuit_gb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_0)).BeginInit();
             this.SuspendLayout();
             // 
             // chatOut
@@ -351,6 +363,76 @@
             this.pbStatus.TabIndex = 50;
             this.pbStatus.TabStop = false;
             // 
+            // cardsToTake
+            // 
+            this.cardsToTake.AutoSize = true;
+            this.cardsToTake.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.cardsToTake.Location = new System.Drawing.Point(13, 115);
+            this.cardsToTake.Name = "cardsToTake";
+            this.cardsToTake.Size = new System.Drawing.Size(145, 24);
+            this.cardsToTake.TabIndex = 51;
+            this.cardsToTake.Text = "                           ";
+            // 
+            // changeSuit_gb
+            // 
+            this.changeSuit_gb.Controls.Add(this.suit_3);
+            this.changeSuit_gb.Controls.Add(this.suit_2);
+            this.changeSuit_gb.Controls.Add(this.suit_1);
+            this.changeSuit_gb.Controls.Add(this.suit_0);
+            this.changeSuit_gb.Controls.Add(this.changeSuit);
+            this.changeSuit_gb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.changeSuit_gb.Location = new System.Drawing.Point(12, 143);
+            this.changeSuit_gb.Name = "changeSuit_gb";
+            this.changeSuit_gb.Size = new System.Drawing.Size(160, 67);
+            this.changeSuit_gb.TabIndex = 52;
+            this.changeSuit_gb.Visible = false;
+            // 
+            // suit_3
+            // 
+            this.suit_3.Location = new System.Drawing.Point(121, 26);
+            this.suit_3.Name = "suit_3";
+            this.suit_3.Size = new System.Drawing.Size(32, 32);
+            this.suit_3.TabIndex = 4;
+            this.suit_3.TabStop = false;
+            this.suit_3.Click += new System.EventHandler(this.csuit_Click);
+            // 
+            // suit_2
+            // 
+            this.suit_2.Location = new System.Drawing.Point(83, 26);
+            this.suit_2.Name = "suit_2";
+            this.suit_2.Size = new System.Drawing.Size(32, 32);
+            this.suit_2.TabIndex = 3;
+            this.suit_2.TabStop = false;
+            this.suit_2.Click += new System.EventHandler(this.csuit_Click);
+            // 
+            // suit_1
+            // 
+            this.suit_1.Location = new System.Drawing.Point(45, 26);
+            this.suit_1.Name = "suit_1";
+            this.suit_1.Size = new System.Drawing.Size(32, 32);
+            this.suit_1.TabIndex = 2;
+            this.suit_1.TabStop = false;
+            this.suit_1.Click += new System.EventHandler(this.csuit_Click);
+            // 
+            // suit_0
+            // 
+            this.suit_0.Location = new System.Drawing.Point(7, 26);
+            this.suit_0.Name = "suit_0";
+            this.suit_0.Size = new System.Drawing.Size(32, 32);
+            this.suit_0.TabIndex = 1;
+            this.suit_0.TabStop = false;
+            this.suit_0.Click += new System.EventHandler(this.csuit_Click);
+            // 
+            // changeSuit
+            // 
+            this.changeSuit.AutoSize = true;
+            this.changeSuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.changeSuit.Location = new System.Drawing.Point(41, 4);
+            this.changeSuit.Name = "changeSuit";
+            this.changeSuit.Size = new System.Drawing.Size(76, 16);
+            this.changeSuit.TabIndex = 0;
+            this.changeSuit.Text = "change suit";
+            // 
             // game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -358,6 +440,8 @@
             this.BackColor = System.Drawing.Color.SeaGreen;
             this.ClientSize = new System.Drawing.Size(936, 364);
             this.ControlBox = false;
+            this.Controls.Add(this.changeSuit_gb);
+            this.Controls.Add(this.cardsToTake);
             this.Controls.Add(this.pbStatus);
             this.Controls.Add(this.player1card10);
             this.Controls.Add(this.player1card9);
@@ -411,6 +495,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.player1card9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).EndInit();
+            this.changeSuit_gb.ResumeLayout(false);
+            this.changeSuit_gb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_0)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -446,6 +536,13 @@
         private System.Windows.Forms.PictureBox player1card9;
         private System.Windows.Forms.PictureBox player1card10;
         private System.Windows.Forms.PictureBox pbStatus;
+        private System.Windows.Forms.Label cardsToTake;
+        private System.Windows.Forms.Panel changeSuit_gb;
+        private System.Windows.Forms.Label changeSuit;
+        private System.Windows.Forms.PictureBox suit_0;
+        private System.Windows.Forms.PictureBox suit_3;
+        private System.Windows.Forms.PictureBox suit_2;
+        private System.Windows.Forms.PictureBox suit_1;
     }
 }
 
