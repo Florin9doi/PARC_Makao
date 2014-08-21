@@ -103,35 +103,46 @@ namespace Client {
 
             // move received
             if ( text.StartsWith ( "0GM_" ) ) {
-                // refresh screen
+                // refresh game
                 string[] players = text.Substring(4).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var player in players) {
-                    string[] tmp = player.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    if ( tmp[0].Equals ( myName ) /*&& tmp.Length == 3*/ ) { // myCard
-                        stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[2]).ToString() + @".bmp");
-                        stack.Tag = tmp[2];
-                        for (int i = 3; i < tmp.Length && i <= 12; i++) {
-                            pb[i - 3].Image = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\Card_" + int.Parse ( tmp[i] ).ToString () + @".bmp" );
-                            pb[i - 3].Tag = tmp[i];
-                        }
-                        for (int i = tmp.Length; i <= 12; i++) {
-                            pb[i - 3].Image = null;
-                            pb[i - 3].Tag = null;
-                        }
-                    } else if ( tmp[0].Equals ( opponentName ) /*&& tmp.Length == 3*/ ) { // oponentCard
-                        for (int i = 3; i < tmp.Length && i <= 12; i++) {
-                            pb[i + 7].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
-                                    Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(tmp[i]).ToString() + @".bmp");                                    
-                            pb[i + 7].Tag = tmp[i];
-                        }
-                        for (int i = tmp.Length; i <= 12; i++) {
-                            pb[i + 7].Image = null;
-                            pb[i + 7].Tag = null;
-                        }
+                if (players[0].StartsWith(GetHost() + ",")) { // this game ?
+
+                    string[] g_gen = players[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    setPermission(myPosition == UInt64.Parse(g_gen[1]) ? true : false);
+                    stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(g_gen[2]).ToString() + @".bmp");
+                    stack.Tag = g_gen[2];
+                    //TODO: cardsToTake, cardToGive
+
+                    string[] myCards = null, opCards = null;
+                    if (myPosition == 1) {
+                        myCards = players[1].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        opCards = players[2].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    } else if (myPosition == 2) {
+                        myCards = players[2].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        opCards = players[1].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     }
 
-                    if ( tmp[0].Equals ( myName ) || tmp[0].Equals ( opponentName ) )
-                        setPermission (myPosition == UInt64.Parse(tmp[1]) ? true : false);
+                    // myCards
+                    for (int i = 0; i < myCards.Length && i <= 10; i++)
+                    {
+                        pb[i].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(myCards[i]).ToString() + @".bmp");
+                        pb[i].Tag = myCards[i];
+                    }
+                    for (int i = myCards.Length; i < 10; i++) {
+                        pb[i].Image = null;
+                        pb[i].Tag = null;
+                    }
+
+                    // opCards
+                    for (int i = 0; i < opCards.Length && i <= 10; i++) {
+                        pb[i + 10].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+                                Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(opCards[i]).ToString() + @".bmp");
+                        pb[i + 10].Tag = opCards[i];
+                    }
+                    for (int i = opCards.Length; i < 10; i++) {
+                        pb[i + 10].Image = null;
+                        pb[i + 10].Tag = null;
+                    }
                 }
             }
 
