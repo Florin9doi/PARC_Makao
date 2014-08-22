@@ -208,22 +208,32 @@ namespace Server
                 if ( gameRooms[gamePointer[tmp[0]]].who == UInt64.Parse ( tmp[1] ) ) { // right player
                     if ( tmp[2].Equals("GC")  ) { // getCard
                         gameRooms[gamePointer[tmp[0]]].GetCard( gameRooms[gamePointer[tmp[0]]].who );
-                        gameRooms[gamePointer[tmp[0]]].SendStatus();
                     } else {
                         gameRooms[gamePointer[tmp[0]]].stack = UInt64.Parse( tmp[2] );
                         
-                        if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
-                            Console.WriteLine( "A" );
-                        } else if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
-                            gameRooms[gamePointer[tmp[0]]].cardsToTake = 2;
+                        //if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
+                        //    Console.WriteLine( "A" );
+                        //} else
+                        if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
+                            if(gameRooms[gamePointer[tmp[0]]].cardsToTake == 1)
+                                gameRooms[gamePointer[tmp[0]]].cardsToTake = 2;
+                            else 
+                                gameRooms[gamePointer[tmp[0]]].cardsToTake += 2;
                         } else if ( UInt64.Parse( tmp[2] ) % 13 == 2 ) { // 3
-                            gameRooms[gamePointer[tmp[0]]].cardsToTake = 3;
+                            if(gameRooms[gamePointer[tmp[0]]].cardsToTake == 1)
+                                gameRooms[gamePointer[tmp[0]]].cardsToTake = 3;
+                            else 
+                                gameRooms[gamePointer[tmp[0]]].cardsToTake += 3;
                         } else if ( UInt64.Parse( tmp[2] ) % 13 == 3 ) { // 4
                             if (gameRooms[gamePointer[tmp[0]]].who == 1)
                                 gameRooms[gamePointer[tmp[0]]].p2stay += 1;
                             else if (gameRooms[gamePointer[tmp[0]]].who == 2)
                                 gameRooms[gamePointer[tmp[0]]].p1stay += 1;
                         }
+                        if (gameRooms[gamePointer[tmp[0]]].who == 1)
+                            gameRooms[gamePointer[tmp[0]]].p1cards.Remove(UInt64.Parse(tmp[2]));
+                        else if (gameRooms[gamePointer[tmp[0]]].who == 2)
+                            gameRooms[gamePointer[tmp[0]]].p2cards.Remove(UInt64.Parse(tmp[2]));
                     }
                     
 
@@ -251,11 +261,10 @@ namespace Server
                     } else if ( win == 2 ) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name2 ) );
                         Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name2 + " has won !!" );
+                    } else {
+                        gameRooms[gamePointer[tmp[0]]].GetNext ();
+                        gameRooms[gamePointer[tmp[0]]].SendStatus();
                     }
-                    // TODO: set next player 
-                    //} else if ( UInt64.Parse ( tmp[2] ) == 0 ) { // stand
-                    //    con.send ( Encoding.Unicode.GetBytes ( "0GM_" + tmp[0] + ";" + gameRooms[gamePointer[tmp[0]]].GetNext () ) );
-                    //}
                 }
             } else
                 Console.WriteLine ("Error: Unknown command: " + text );

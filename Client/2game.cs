@@ -84,14 +84,13 @@ namespace Client {
             this.Text = myName;
             setPermission ( myPosition == 1 ? true : false );
 
+            cs = new PictureBox[4];
             cs[0] = suit_0;
             cs[1] = suit_1;
             cs[2] = suit_2;
             cs[3] = suit_3;
-            suit_0.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_0.png");
-            suit_1.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_1.png");
-            suit_2.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_2.png");
-            suit_3.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_3.png");
+            for (int i = 0; i < 4; i++)
+                cs[i].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_" + i + @".png");
         }
 
         void con_OnExceptionRaised ( object sender, ExceptionRaiseEventArgs args ) {

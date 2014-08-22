@@ -16,4 +16,4 @@ array(card) <-> array(nr)
 
 TODO:
 random(not Shown cards)
-get card(push to player(1-2) or to stack(3), nrOfCards)
+preload the images
