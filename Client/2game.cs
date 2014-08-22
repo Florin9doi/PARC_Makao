@@ -158,18 +158,16 @@ namespace Client {
                     }
                     for (int i = myCards.Length; i < 10; i++) {
                         pb[i].Image = null;
-                        pb[i].Tag = null;
+                        pb[i].Tag = "";
                     }
 
                     // opCards
                     for (int i = 0; i < opCards.Length && i < 10; i++) {
                         pb[i + 10].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
                                 Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(opCards[i]).ToString() + @".bmp");
-                        pb[i + 10].Tag = opCards[i];
                     }
                     for (int i = opCards.Length; i < 10; i++) {
                         pb[i + 10].Image = null;
-                        pb[i + 10].Tag = null;
                     }
                 }
             }
@@ -233,10 +231,10 @@ namespace Client {
             else if (((PictureBox)sender).Tag == null)
                 System.Media.SystemSounds.Hand.Play();
 
-            /* valid move */
-            else if ( int.Parse((string)stack.Tag) / 13 == 2 || int.Parse((string)stack.Tag) / 13 == 3 ) {
-                if (int.Parse((string)stack.Tag) / 13 == 2 && int.Parse((String)((PictureBox)sender).Tag) == 2
-                    || int.Parse((string)stack.Tag) / 13 == 3 && int.Parse((String)((PictureBox)sender).Tag) == 3)
+            /* valid move */ //TODO force only if cards to take > 1 and allow 2 above 3
+            else if ( int.Parse((string)stack.Tag) % 13 == 1 || int.Parse((string)stack.Tag) % 13 == 2 ) {
+                if (int.Parse((string)stack.Tag) % 13 == 1 && int.Parse((String)((PictureBox)sender).Tag) % 13 == 1 // 2
+                    || int.Parse((string)stack.Tag) % 13 == 2 && int.Parse((String)((PictureBox)sender).Tag) % 13 == 2) // 3
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
             }
             else if ( changeSuit_gb.Tag != null && (int)changeSuit_gb.Tag == int.Parse((String)((PictureBox)sender).Tag) / 13
@@ -246,17 +244,18 @@ namespace Client {
                     for (int i = 0; i < 4; i++)
                         cs[i].Visible = true;
                     changeSuit_gb.Visible = true;
+                    changeSuit.Tag = ((PictureBox)sender).Tag;
                 } else {
                     con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
-                    changeSuit_gb.Tag = null;
+                    changeSuit_gb.Tag = "";
                 }
             }
         }
 
         private void csuit_Click(object sender, EventArgs e) {
             if (changeSuit_gb.Tag == null) {
-                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag 
-                    + ";" + (String)((PictureBox)sender).Name.Substring(4).ToString()));
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + changeSuit.Tag 
+                    + ";" + (String)((PictureBox)sender).Name.Substring(5).ToString()));
                 changeSuit_gb.Visible = false;
             }
         }

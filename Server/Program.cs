@@ -210,26 +210,31 @@ namespace Server
                         gameRooms[gamePointer[tmp[0]]].GetCard( gameRooms[gamePointer[tmp[0]]].who );
                     } else {
                         gameRooms[gamePointer[tmp[0]]].stack = UInt64.Parse( tmp[2] );
+
+                        if (UInt64.Parse(tmp[2]) % 13 == 0) // A
+                            gameRooms[gamePointer[tmp[0]]].changeSuit = UInt64.Parse( tmp[3] );
+                        else
+                            gameRooms[gamePointer[tmp[0]]].changeSuit = 0;
                         
-                        //if ( UInt64.Parse( tmp[2] ) % 13 == 0 ) { // A
-                        //    Console.WriteLine( "A" );
-                        //} else
                         if ( UInt64.Parse( tmp[2] ) % 13 == 1 ) { // 2
                             if(gameRooms[gamePointer[tmp[0]]].cardsToTake == 1)
                                 gameRooms[gamePointer[tmp[0]]].cardsToTake = 2;
                             else 
                                 gameRooms[gamePointer[tmp[0]]].cardsToTake += 2;
+
                         } else if ( UInt64.Parse( tmp[2] ) % 13 == 2 ) { // 3
                             if(gameRooms[gamePointer[tmp[0]]].cardsToTake == 1)
                                 gameRooms[gamePointer[tmp[0]]].cardsToTake = 3;
                             else 
                                 gameRooms[gamePointer[tmp[0]]].cardsToTake += 3;
+
                         } else if ( UInt64.Parse( tmp[2] ) % 13 == 3 ) { // 4
                             if (gameRooms[gamePointer[tmp[0]]].who == 1)
-                                gameRooms[gamePointer[tmp[0]]].p2stay += 1;
+                                gameRooms[gamePointer[tmp[0]]].p2stay = 1;
                             else if (gameRooms[gamePointer[tmp[0]]].who == 2)
-                                gameRooms[gamePointer[tmp[0]]].p1stay += 1;
+                                gameRooms[gamePointer[tmp[0]]].p1stay = 1;
                         }
+
                         if (gameRooms[gamePointer[tmp[0]]].who == 1)
                             gameRooms[gamePointer[tmp[0]]].p1cards.Remove(UInt64.Parse(tmp[2]));
                         else if (gameRooms[gamePointer[tmp[0]]].who == 2)
