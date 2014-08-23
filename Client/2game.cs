@@ -65,6 +65,7 @@ namespace Client {
             this.ChangeSuitImgStorage = ChangeSuitImgStorage;
             this.CardsImgStorage = CardsImgStorage;
             backCard.Image = this.CardsImgStorage[52];
+            backCard.Tag = -1;
 
             pb = new PictureBox[20];
             pb[0] = player1card1;
@@ -231,17 +232,20 @@ namespace Client {
 
         // send game action
         private void card_Click ( object sender, EventArgs e ) {
+            // invalid action
+            if (pbStatus.BackColor == Color.Red || ((PictureBox)sender).Tag == null) return;
 
             /* get a new card */
-            if (((PictureBox)sender).Name.Equals("backCard"))
+            else if (((PictureBox)sender).Name.Equals("backCard"))
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";GC"));
-
-            // invalid action
-            else if (((PictureBox)sender).Tag == null || pbStatus.BackColor == Color.Red);
 
             // 2 or 3 in stack & valid card
             else if (cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 1 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 1 // 2
-                  || cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 2 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 2) // 3
+                  || cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 1 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 2 
+                        && UInt64.Parse((String)((PictureBox)sender).Tag) / 13 == UInt64.Parse((string)stack.Tag) / 13 // 3 above 2
+                  || cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 2 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 2
+                  || cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 2 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 1
+                        && UInt64.Parse((String)((PictureBox)sender).Tag) / 13 == UInt64.Parse((string)stack.Tag) / 13) // 2 above 3
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
             // 2 or 3 in stack & invalid card
             else if (cardsToTake.Text.Length > 0)

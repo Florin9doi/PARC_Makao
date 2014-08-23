@@ -23,10 +23,6 @@ namespace Server
             public UInt64 cardsToTake;
             public UInt64 changeSuit;
 
-            public UInt64 cardMax;
-            public UInt64[] cardsArray;
-            Random rnd;
-
             // GameStruct constructor
             public GameStruct(string name1, string name2, UInt16 who) {
                 this.name1 = name1;
@@ -38,31 +34,25 @@ namespace Server
                 p2stay = 0; // 4
                 cardsToTake = 1; // 2 + 3
                 changeSuit = 0; // A
-
-                cardMax = 52;
-                cardsArray = new UInt64[53];
-                rnd = new Random();
-                for (UInt64 i = 0; i < cardMax; i++) cardsArray[i] = i;
             }
 
             // get cards
-            public UInt64 GetCard(UInt64 who) {
-                for (UInt64 i = 0; i < cardsToTake && cardMax > 0; i++) {
-                    UInt64 retPos = (UInt64)rnd.Next(0, (int)cardMax);
-                    UInt64 returnCard = cardsArray[retPos];
-                    cardMax--;
-                    cardsArray[retPos] = cardsArray[cardMax];
+            public void GetCard(UInt64 who) {
+                for (UInt64 i = 0; i < cardsToTake; i++) {
+                    Random rnd = new Random();
+                    UInt64 card;
+                    do card = (UInt64)rnd.Next(0, 52);
+                    while( card==stack || p1cards.ContainsKey(card) || p2cards.ContainsKey(card) );
 
                     if (who == 1) {
-                        p1cards.Add(returnCard, true);
+                        p1cards.Add(card, true);
                     } else if (who == 2) {
-                        p2cards.Add(returnCard, true);
+                        p2cards.Add(card, true);
                     } else if (who == 3) {
-                        stack = returnCard;
+                        stack = card;
                     }
                 }
                 cardsToTake = 1;
-                return 0;
             }
 
             // get next player
@@ -158,9 +148,10 @@ namespace Server
                 gameRooms[gamePointer[player[0]]].GetCard(3);
 
                 // players cards
-                for (UInt64 i = 1; i <= 8; i++) {
-                    gameRooms[gamePointer[player[0]]].GetCard(i % 2 + 1); // 1>2>1>2
-                }
+                gameRooms[gamePointer[player[0]]].cardsToTake = 4;
+                gameRooms[gamePointer[player[0]]].GetCard(1);
+                gameRooms[gamePointer[player[0]]].cardsToTake = 4;
+                gameRooms[gamePointer[player[0]]].GetCard(2);
                 gameRooms[gamePointer[player[0]]].SendStatus();
             }
 
@@ -190,9 +181,10 @@ namespace Server
                 gameRooms[nrOfGame].GetCard(3);
 
                 // players cards
-                for (UInt64 i = 1; i <= 8; i++) {
-                    gameRooms[nrOfGame].GetCard(i % 2 + 1); // 1>2>1>2
-                }
+                gameRooms[nrOfGame].cardsToTake = 4;
+                gameRooms[nrOfGame].GetCard(1);
+                gameRooms[nrOfGame].cardsToTake = 4;
+                gameRooms[nrOfGame].GetCard(2);
                 gameRooms[nrOfGame].SendStatus();
             }
 

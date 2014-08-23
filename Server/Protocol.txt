@@ -6,13 +6,3 @@
 0GR - reporneste joc
 0GM - miscare joc
 00C - mesaj chat
-
-
-array[52]  (0 .. 51)
-nr = 52
-card = floor( random(nr) )
-nr--
-array(card) <-> array(nr)
-
-TODO:
-random(not Shown cards)
