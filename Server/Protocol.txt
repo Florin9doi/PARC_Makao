@@ -16,4 +16,3 @@ array(card) <-> array(nr)
 
 TODO:
 random(not Shown cards)
-preload the images

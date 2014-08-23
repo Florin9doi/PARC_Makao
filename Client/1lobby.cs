@@ -13,7 +13,9 @@ using System.Net;
 namespace Client {
     public partial class lobby : Form {
         private const int port = 3000;
-        private Image[] GameStatus;
+        private Image[] GameStatusImgStorage;
+        private Image[] ChangeSuitImgStorage;
+        private Image[] CardsImgStorage;
         private TCPConnection con;
         private String name;
         private bool gameCreated = false;
@@ -23,10 +25,20 @@ namespace Client {
         public lobby () {
             InitializeComponent ();
 
-            GameStatus = new Image[3];
-            GameStatus[0] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status0.png" );
-            GameStatus[1] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status1.png" );
-            GameStatus[2] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status1.png" );
+            GameStatusImgStorage = new Image[3];
+            GameStatusImgStorage[0] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status0.png" );
+            GameStatusImgStorage[1] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status1.png" );
+            GameStatusImgStorage[2] = Image.FromFile ( Directory.GetCurrentDirectory () + @"\Imagini\status1.png" );
+
+            ChangeSuitImgStorage = new Image[4];
+            for (int i = 0; i < 4; i++)
+                ChangeSuitImgStorage[i] = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_" + i + @".png");
+
+            CardsImgStorage = new Image[53];
+            for (int i = 0; i < 52; i++)
+                CardsImgStorage[i] = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + i + @".bmp");
+            CardsImgStorage[52] = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
+
         }
 
         // CONNECT
@@ -71,7 +83,7 @@ namespace Client {
                 string[] games = text.Split ( new string[] { "0GH_" }, StringSplitOptions.RemoveEmptyEntries );
                 foreach ( string game in games ) {
                     string[] tmp = game.Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
-                    gameList.Rows.Add ( tmp[0], GameStatus[UInt64.Parse ( tmp[1] )] );
+                    gameList.Rows.Add ( tmp[0], GameStatusImgStorage[UInt64.Parse ( tmp[1] )] );
                 }
             }
 
@@ -81,7 +93,7 @@ namespace Client {
 
                 foreach ( DataGridViewRow r in gameList.Rows )
                     if ( r.Cells[0].Value.Equals ( tmp[0] ) )
-                        r.Cells[1].Value = GameStatus[UInt64.Parse ( tmp[1] )];
+                        r.Cells[1].Value = GameStatusImgStorage[UInt64.Parse ( tmp[1] )];
             }
 
             /* remove game */
@@ -102,11 +114,11 @@ namespace Client {
             else if ( text.StartsWith ( "0GJ_" ) ) {
                 string[] tmp = text.Substring ( 4 ).Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
                 if ( tmp[0].Equals ( name ) ) { // host
-                    step2 = new game ( con, this, tmp[0], tmp[1], 1 );
+                    step2 = new game(con, this, tmp[0], tmp[1], 1, ChangeSuitImgStorage, CardsImgStorage);
                     step2.Show ();
                     this.Hide ();
                 } else if ( tmp[1].Equals ( name ) ) { // guest
-                    step2 = new game ( con, this, tmp[0], tmp[1], 2 );
+                    step2 = new game(con, this, tmp[0], tmp[1], 2, ChangeSuitImgStorage, CardsImgStorage);
                     step2.Show ();
                     this.Hide ();
                 }
@@ -138,7 +150,7 @@ namespace Client {
         // join game
         private void gameList_CellMouseDoubleClick ( object sender, DataGridViewCellMouseEventArgs e ) {
             if ( gameList.SelectedRows.Count == 1 // !outOfRange
-                && gameList[1, gameList.CurrentCell.RowIndex].Value.Equals ( GameStatus[0] )  // available
+                && gameList[1, gameList.CurrentCell.RowIndex].Value.Equals ( GameStatusImgStorage[0] )  // available
                 && !gameList[0, gameList.CurrentCell.RowIndex].Value.Equals ( name ) ) //  && !myself
                 con.send ( Encoding.Unicode.GetBytes ( "0GJ_" + gameList[0, gameList.CurrentCell.RowIndex].Value + ";" + name ) );
             else

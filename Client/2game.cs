@@ -18,9 +18,16 @@ namespace Client {
         private lobby lobby_inst; // window instance
         private PictureBox[] pb, cs;
 
+        private Image[] ChangeSuitImgStorage, CardsImgStorage;
+
         private UInt16 myPosition;
         private String myName;
         private String opponentName;
+
+        private UInt64 changeSuitVal;
+        private bool iChangeSuit;
+
+
 
         private void setPermission ( bool perm ) {
             if (perm)
@@ -46,9 +53,18 @@ namespace Client {
         }
 
         public game(TCPConnection con, lobby lobby_inst,
-                        String host, String guest, UInt16 position ) {
+                        String host, String guest, UInt16 position,
+                        Image[] ChangeSuitImgStorage, Image[] CardsImgStorage) {
 
             InitializeComponent ();
+
+            this.con = con;
+            con.OnExceptionRaised += con_OnExceptionRaised;
+            con.OnReceiveCompleted += con_OnReceiveCompleted;
+
+            this.ChangeSuitImgStorage = ChangeSuitImgStorage;
+            this.CardsImgStorage = CardsImgStorage;
+            backCard.Image = this.CardsImgStorage[52];
 
             pb = new PictureBox[20];
             pb[0] = player1card1;
@@ -71,26 +87,22 @@ namespace Client {
             pb[17] = player2card8;
             pb[18] = player2card9;
             pb[19] = player2card10;
-            backCard.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
 
-            this.con = con;
-            con.OnExceptionRaised += con_OnExceptionRaised;
-            con.OnReceiveCompleted += con_OnReceiveCompleted;
+            cs = new PictureBox[4];
+            cs[0] = suit_1;
+            cs[1] = suit_2;
+            cs[2] = suit_3;
+            cs[3] = suit_4;
 
+            for (int i = 0; i < 4; i++)
+                cs[i].Image = this.ChangeSuitImgStorage[i];
+            
             this.lobby_inst = lobby_inst;
             myPosition = position;
             myName = position == 1 ? host : guest;
             opponentName = position == 1 ? guest : host;
             this.Text = myName;
             setPermission ( myPosition == 1 ? true : false );
-
-            cs = new PictureBox[4];
-            cs[0] = suit_0;
-            cs[1] = suit_1;
-            cs[2] = suit_2;
-            cs[3] = suit_3;
-            for (int i = 0; i < 4; i++)
-                cs[i].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\suit_" + i + @".png");
         }
 
         void con_OnExceptionRaised ( object sender, ExceptionRaiseEventArgs args ) {
@@ -119,26 +131,25 @@ namespace Client {
                     // who
                     setPermission(myPosition == UInt64.Parse(g_gen[1]) ? true : false);
                     // stack
-                    stack.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(g_gen[2]).ToString() + @".bmp");
+                    stack.Image = CardsImgStorage[int.Parse(g_gen[2])];
                     stack.Tag = g_gen[2];
                     // cardsToTake
-                    if (int.Parse(g_gen[3]) > 1)
+                    if (UInt64.Parse(g_gen[3]) > 1)
                         cardsToTake.Text = "Cards to take: " + g_gen[3];
                     else
                         cardsToTake.Text = "";
                     // changeSuit
-                    if (int.Parse(g_gen[4]) > 0) {
+                    changeSuitVal = UInt64.Parse(g_gen[4]);
+                    if (changeSuitVal > 0) {
                         changeSuit_gb.Visible = true;
-                        changeSuit_gb.Tag = int.Parse(g_gen[4])-1;
-                        for (int i = 0; i < 4; i++)
-                            if (i + 1 == int.Parse(g_gen[4]))
+                        for (UInt64 i = 0; i < 4; i++)
+                            if (changeSuitVal - 1 == i)
                                 cs[i].Visible = true;
                             else
                                 cs[i].Visible = false;
                     }
                     else {
                         changeSuit_gb.Visible = false;
-                        changeSuit_gb.Tag = null;
                     }
 
                     string[] myCards = null, opCards = null;
@@ -151,20 +162,18 @@ namespace Client {
                     }
 
                     // myCards
-                    for (int i = 0; i < myCards.Length && i < 10; i++)
-                    {
-                        pb[i].Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(myCards[i]).ToString() + @".bmp");
+                    for (int i = 0; i < myCards.Length && i < 10; i++) {
+                        pb[i].Image = CardsImgStorage[int.Parse(myCards[i])];
                         pb[i].Tag = myCards[i];
                     }
                     for (int i = myCards.Length; i < 10; i++) {
                         pb[i].Image = null;
-                        pb[i].Tag = "";
+                        pb[i].Tag = null;
                     }
 
                     // opCards
                     for (int i = 0; i < opCards.Length && i < 10; i++) {
-                        pb[i + 10].Image = //Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\back.bmp");
-                                Image.FromFile(Directory.GetCurrentDirectory() + @"\Imagini\Card_" + int.Parse(opCards[i]).ToString() + @".bmp");
+                        pb[i + 10].Image = CardsImgStorage[52];
                     }
                     for (int i = opCards.Length; i < 10; i++) {
                         pb[i + 10].Image = null;
@@ -227,36 +236,49 @@ namespace Client {
             if (((PictureBox)sender).Name.Equals("backCard"))
                 con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";GC"));
 
-            /* invalid move */
-            else if (((PictureBox)sender).Tag == null)
+            // invalid action
+            else if (((PictureBox)sender).Tag == null || pbStatus.BackColor == Color.Red);
+
+            // 2 or 3 in stack & valid card
+            else if (cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 1 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 1 // 2
+                  || cardsToTake.Text.Length > 0 && UInt64.Parse((string)stack.Tag) % 13 == 2 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 2) // 3
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
+            // 2 or 3 in stack & invalid card
+            else if (cardsToTake.Text.Length > 0)
                 System.Media.SystemSounds.Hand.Play();
 
-            /* valid move */ //TODO force only if cards to take > 1 and allow 2 above 3
-            else if ( int.Parse((string)stack.Tag) % 13 == 1 || int.Parse((string)stack.Tag) % 13 == 2 ) {
-                if (int.Parse((string)stack.Tag) % 13 == 1 && int.Parse((String)((PictureBox)sender).Tag) % 13 == 1 // 2
-                    || int.Parse((string)stack.Tag) % 13 == 2 && int.Parse((String)((PictureBox)sender).Tag) % 13 == 2) // 3
-                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
-            }
-            else if ( changeSuit_gb.Tag != null && (int)changeSuit_gb.Tag == int.Parse((String)((PictureBox)sender).Tag) / 13
-                    || changeSuit_gb.Tag == null && int.Parse((String)((PictureBox)sender).Tag) / 13 == int.Parse((string)stack.Tag) / 13
-                    || changeSuit_gb.Tag == null && int.Parse((String)((PictureBox)sender).Tag) % 13 == int.Parse((string)stack.Tag) % 13) {
-                if (int.Parse((String)((PictureBox)sender).Tag) % 13 == 0) {
-                    for (int i = 0; i < 4; i++)
+            else if (changeSuitVal > 0 && UInt64.Parse((String)((PictureBox)sender).Tag) / 13 + 1 == changeSuitVal
+                    || changeSuitVal == 0 && UInt64.Parse((String)((PictureBox)sender).Tag) / 13 == UInt64.Parse((string)stack.Tag) / 13
+                    || changeSuitVal == 0 && UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == UInt64.Parse((string)stack.Tag) % 13)
+            {
+                if (UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 0)
+                { // A
+                    iChangeSuit = true;
+                    changeSuitVal = UInt64.Parse((String)((PictureBox)sender).Tag);
+                    for (UInt64 i = 0; i < 4; i++)
                         cs[i].Visible = true;
                     changeSuit_gb.Visible = true;
-                    changeSuit.Tag = ((PictureBox)sender).Tag;
-                } else {
-                    con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
-                    changeSuit_gb.Tag = "";
                 }
+                else
+                    con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + ((PictureBox)sender).Tag));
+            }
+
+            // iChangeSuit
+            else if (UInt64.Parse((String)((PictureBox)sender).Tag) % 13 == 0) { // A
+                iChangeSuit = true;
+                changeSuitVal = UInt64.Parse((String)((PictureBox)sender).Tag);
+                for (UInt64 i = 0; i < 4; i++)
+                    cs[i].Visible = true;
+                changeSuit_gb.Visible = true;
             }
         }
 
         private void csuit_Click(object sender, EventArgs e) {
-            if (changeSuit_gb.Tag == null) {
-                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + changeSuit.Tag 
-                    + ";" + (String)((PictureBox)sender).Name.Substring(5).ToString()));
+            if (iChangeSuit == true) {
                 changeSuit_gb.Visible = false;
+                iChangeSuit = false;
+                con.send(Encoding.Unicode.GetBytes("0GM_" + myName + ";" + myPosition + ";" + changeSuitVal 
+                    + ";" + (String)((PictureBox)sender).Name.Substring(5).ToString()));
             }
         }
     }

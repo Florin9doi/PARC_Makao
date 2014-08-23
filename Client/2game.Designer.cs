@@ -59,10 +59,10 @@
             this.pbStatus = new System.Windows.Forms.PictureBox();
             this.cardsToTake = new System.Windows.Forms.Label();
             this.changeSuit_gb = new System.Windows.Forms.Panel();
+            this.suit_4 = new System.Windows.Forms.PictureBox();
             this.suit_3 = new System.Windows.Forms.PictureBox();
             this.suit_2 = new System.Windows.Forms.PictureBox();
             this.suit_1 = new System.Windows.Forms.PictureBox();
-            this.suit_0 = new System.Windows.Forms.PictureBox();
             this.changeSuit = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.player1card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1card2)).BeginInit();
@@ -88,10 +88,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.player1card10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).BeginInit();
             this.changeSuit_gb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.suit_0)).BeginInit();
             this.SuspendLayout();
             // 
             // chatOut
@@ -375,10 +375,10 @@
             // 
             // changeSuit_gb
             // 
+            this.changeSuit_gb.Controls.Add(this.suit_4);
             this.changeSuit_gb.Controls.Add(this.suit_3);
             this.changeSuit_gb.Controls.Add(this.suit_2);
             this.changeSuit_gb.Controls.Add(this.suit_1);
-            this.changeSuit_gb.Controls.Add(this.suit_0);
             this.changeSuit_gb.Controls.Add(this.changeSuit);
             this.changeSuit_gb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.changeSuit_gb.Location = new System.Drawing.Point(12, 143);
@@ -387,41 +387,41 @@
             this.changeSuit_gb.TabIndex = 52;
             this.changeSuit_gb.Visible = false;
             // 
+            // suit_4
+            // 
+            this.suit_4.Location = new System.Drawing.Point(121, 26);
+            this.suit_4.Name = "suit_4";
+            this.suit_4.Size = new System.Drawing.Size(32, 32);
+            this.suit_4.TabIndex = 4;
+            this.suit_4.TabStop = false;
+            this.suit_4.Click += new System.EventHandler(this.csuit_Click);
+            // 
             // suit_3
             // 
-            this.suit_3.Location = new System.Drawing.Point(121, 26);
+            this.suit_3.Location = new System.Drawing.Point(83, 26);
             this.suit_3.Name = "suit_3";
             this.suit_3.Size = new System.Drawing.Size(32, 32);
-            this.suit_3.TabIndex = 4;
+            this.suit_3.TabIndex = 3;
             this.suit_3.TabStop = false;
             this.suit_3.Click += new System.EventHandler(this.csuit_Click);
             // 
             // suit_2
             // 
-            this.suit_2.Location = new System.Drawing.Point(83, 26);
+            this.suit_2.Location = new System.Drawing.Point(45, 26);
             this.suit_2.Name = "suit_2";
             this.suit_2.Size = new System.Drawing.Size(32, 32);
-            this.suit_2.TabIndex = 3;
+            this.suit_2.TabIndex = 2;
             this.suit_2.TabStop = false;
             this.suit_2.Click += new System.EventHandler(this.csuit_Click);
             // 
             // suit_1
             // 
-            this.suit_1.Location = new System.Drawing.Point(45, 26);
+            this.suit_1.Location = new System.Drawing.Point(7, 26);
             this.suit_1.Name = "suit_1";
             this.suit_1.Size = new System.Drawing.Size(32, 32);
-            this.suit_1.TabIndex = 2;
+            this.suit_1.TabIndex = 1;
             this.suit_1.TabStop = false;
             this.suit_1.Click += new System.EventHandler(this.csuit_Click);
-            // 
-            // suit_0
-            // 
-            this.suit_0.Location = new System.Drawing.Point(7, 26);
-            this.suit_0.Name = "suit_0";
-            this.suit_0.Size = new System.Drawing.Size(32, 32);
-            this.suit_0.TabIndex = 1;
-            this.suit_0.TabStop = false;
-            this.suit_0.Click += new System.EventHandler(this.csuit_Click);
             // 
             // changeSuit
             // 
@@ -497,10 +497,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbStatus)).EndInit();
             this.changeSuit_gb.ResumeLayout(false);
             this.changeSuit_gb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.suit_4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.suit_1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.suit_0)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -539,10 +539,10 @@
         private System.Windows.Forms.Label cardsToTake;
         private System.Windows.Forms.Panel changeSuit_gb;
         private System.Windows.Forms.Label changeSuit;
-        private System.Windows.Forms.PictureBox suit_0;
+        private System.Windows.Forms.PictureBox suit_1;
+        private System.Windows.Forms.PictureBox suit_4;
         private System.Windows.Forms.PictureBox suit_3;
         private System.Windows.Forms.PictureBox suit_2;
-        private System.Windows.Forms.PictureBox suit_1;
     }
 }
 

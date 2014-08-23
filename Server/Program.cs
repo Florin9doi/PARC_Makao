@@ -152,13 +152,13 @@ namespace Server
                 //start game
                 con.send(Encoding.Unicode.GetBytes("0GS_" + player[0] + ";" + 1));
                 con.send(Encoding.Unicode.GetBytes("0GJ_" + player[0] + ";" + player[1] ) );
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(1000);
 
                 // first card
                 gameRooms[gamePointer[player[0]]].GetCard(3);
 
                 // players cards
-                for (UInt64 i = 1; i <= 10; i++) {
+                for (UInt64 i = 1; i <= 8; i++) {
                     gameRooms[gamePointer[player[0]]].GetCard(i % 2 + 1); // 1>2>1>2
                 }
                 gameRooms[gamePointer[player[0]]].SendStatus();
@@ -190,7 +190,7 @@ namespace Server
                 gameRooms[nrOfGame].GetCard(3);
 
                 // players cards
-                for (UInt64 i = 1; i <= 10; i++) {
+                for (UInt64 i = 1; i <= 8; i++) {
                     gameRooms[nrOfGame].GetCard(i % 2 + 1); // 1>2>1>2
                 }
                 gameRooms[nrOfGame].SendStatus();
@@ -240,30 +240,12 @@ namespace Server
                         else if (gameRooms[gamePointer[tmp[0]]].who == 2)
                             gameRooms[gamePointer[tmp[0]]].p2cards.Remove(UInt64.Parse(tmp[2]));
                     }
-                    
 
-                    UInt64 win = 0;
-                    //if ( tmp[0].Equals ( gameRooms[gamePointer[tmp[0]]].name1 ) ) { // player 1
-                    //    if ( gameRooms[gamePointer[tmp[0]]].p1Score == 21 ) // p1 win
-                    //        win = 1;
-                    //    else if ( gameRooms[gamePointer[tmp[0]]].p1Score > 21 ) // p2 win
-                    //        win = 2;
-                    //} else if ( tmp[0].Equals ( gameRooms[gamePointer[tmp[0]]].name2 ) ) { // player 2
-                    //    if ( gameRooms[gamePointer[tmp[0]]].p2Score == 21 ) // p2 win
-                    //        win = 2;
-                    //    else if ( gameRooms[gamePointer[tmp[0]]].p2Score > 21 ) // p1 win
-                    //        win = 1;
-                    //}
-                    //if ( gameRooms[gamePointer[tmp[0]]].p1stay == true && gameRooms[gamePointer[tmp[0]]].p2stay == true ) {
-                    //    if ( gameRooms[gamePointer[tmp[0]]].p1Score > gameRooms[gamePointer[tmp[0]]].p2Score )
-                    //        win = 1;
-                    //    else win = 2;
-                    //}
-
-                    if ( win == 1 ) {
+                    if ( gameRooms[gamePointer[tmp[0]]].p1cards.Count == 0 ) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name1 ) );
                         Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name1 + " has won !!" );
-                    } else if ( win == 2 ) {
+                    }
+                    else if (gameRooms[gamePointer[tmp[0]]].p2cards.Count == 0) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name2 ) );
                         Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name2 + " has won !!" );
                     } else {
