@@ -11,6 +11,7 @@ namespace Server
 {
     class Program {
         public const int port = 3000;
+        public const bool DEBUG = false;
         private static TCPConnection con = new TCPConnection();
 
         public class GameStruct {
@@ -36,7 +37,7 @@ namespace Server
                 changeSuit = 0; // A
             }
 
-            // get cards
+            // get card
             public void GetCard(UInt64 who) {
                 for (UInt64 i = 0; i < cardsToTake; i++) {
                     Random rnd = new Random();
@@ -75,7 +76,7 @@ namespace Server
                 foreach (var card in p1cards) msg += "," + card.Key;
                 msg += ";";
                 foreach (var card in p2cards) msg += "," + card.Key;
-                Console.WriteLine( msg );
+                if (DEBUG) Console.WriteLine(msg);
                 con.send(Encoding.Unicode.GetBytes( msg ));
             }
         } // end of GameStruct
@@ -106,7 +107,7 @@ namespace Server
 
         static void con_OnReceiveCompleted(object sender, ReceiveCompletedEventArgs args) {
             string text = Encoding.Unicode.GetString(args.data);
-            Console.WriteLine(text);
+            if (DEBUG) Console.WriteLine(text);
             IPEndPoint iep = ( args.remoteSock.RemoteEndPoint as IPEndPoint );
             string clientAddr = iep.Address.ToString () + iep.Port;
 
@@ -120,7 +121,7 @@ namespace Server
             // host game
             else if ( text.StartsWith ( "0GH_" ) ) {
                 string player1 = text.Substring ( 4 );
-                Console.WriteLine ( player1 + " has created a game" );
+                if (DEBUG) Console.WriteLine(player1 + " has created a game");
 
                 gameRooms.Add ( nrOfGame, new GameStruct ( player1, "", 0 ) );
                 gamePointer.Add ( player1, nrOfGame );
@@ -133,7 +134,7 @@ namespace Server
             // join game
             else if ( text.StartsWith ( "0GJ_" ) ) {
                 string[] player = text.Substring ( 4 ).Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
-                Console.WriteLine ( player[1] + " has joied " + player[0] + "'s game" );
+                if (DEBUG) Console.WriteLine(player[1] + " has joied " + player[0] + "'s game");
 
                 UInt64 nrOfGame = gamePointer[player[0]];
                 gameRooms[nrOfGame] = new GameStruct ( player[0], player[1], 1 );
@@ -158,7 +159,7 @@ namespace Server
             // exit game
             else if ( text.StartsWith ( "0GE_" ) ) {
                 string player = text.Substring ( 4 );
-                Console.WriteLine ( player + " has closed the game" );
+                if (DEBUG) Console.WriteLine(player + " has closed the game");
 
                 UInt64 nrOfGame = gamePointer[player];
                 con.send ( Encoding.Unicode.GetBytes ( "0GE_" + gameRooms[nrOfGame].name1 ) );
@@ -190,7 +191,7 @@ namespace Server
 
             // chat
             else if ( text.StartsWith ( "00C_" ) ) {
-                Console.WriteLine ( text.Substring ( 4 ) );
+                if (DEBUG) Console.WriteLine(text.Substring(4));
                 con.send ( Encoding.Unicode.GetBytes ( "00C_" + text.Substring ( 4 ) ) );
             }
 
@@ -235,18 +236,18 @@ namespace Server
 
                     if ( gameRooms[gamePointer[tmp[0]]].p1cards.Count == 0 ) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name1 ) );
-                        Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name1 + " has won !!" );
+                        if (DEBUG) Console.WriteLine(gameRooms[gamePointer[tmp[0]]].name1 + " has won !!");
                     }
                     else if (gameRooms[gamePointer[tmp[0]]].p2cards.Count == 0) {
                         con.send ( Encoding.Unicode.GetBytes ( "0GW_" + gameRooms[gamePointer[tmp[0]]].name2 ) );
-                        Console.WriteLine ( gameRooms[gamePointer[tmp[0]]].name2 + " has won !!" );
+                        if (DEBUG) Console.WriteLine(gameRooms[gamePointer[tmp[0]]].name2 + " has won !!");
                     } else {
                         gameRooms[gamePointer[tmp[0]]].GetNext ();
                         gameRooms[gamePointer[tmp[0]]].SendStatus();
                     }
                 }
             } else
-                Console.WriteLine ("Error: Unknown command: " + text );
+                if (DEBUG) Console.WriteLine("Error: Unknown command: " + text);
         }
     }
 }
